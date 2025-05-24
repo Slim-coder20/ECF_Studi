@@ -24,6 +24,21 @@ body {
   color: var(--text-color);
   overflow-x: hidden;
 }
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.wrapper {
+  min-height: 100vh; /* hauteur minimum = hauteur de la fenêtre */
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex: 1; /* prend tout l'espace restant */
+}
+
 h1,
 h2,
 h3,
@@ -84,23 +99,24 @@ h6 {
   gap: 10px; /* Optionnel : espace entre les liens de la navbar  */
 }
 
-
 /* Footer  */
 
-.footer-custom{
+.footer-custom {
   background-color: var(--color-footer);
   color: #fff;
   padding: 20px;
   text-align: center;
-  position: relative;
-  bottom: 0;
   width: 100%;
 }
 
-.footer-link{
+.footer-link {
   color: #fff;
   text-decoration: none;
 }
 .footer-link:hover {
   color: var(--primary-color);
+}
+
+.list-inline-item:hover{
+    color: var(--primary-color);
 }
