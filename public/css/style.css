@@ -1,1 +1,85 @@
 /* css */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+:root {
+  --primary-color: #6ca138;
+  --color-footer: rgb(25, 135, 84);
+  --secondary-color: #d2f4b0;
+  --color-body: #f2faf2;
+  --text-color: #666262;
+  --font-family: "Roboto", sans-serif;
+  --font-size: 1.2rem;
+  --font-weight: 400;
+  --line-height: 1.6;
+}
+
+body {
+  background-color: var(--color-body);
+  font-family: var(--Roboto);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
+  line-height: var(--line-height);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: var(--text-color);
+  overflow-x: hidden;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--title-color);
+}
+
+/*  NavBar  */
+
+.navbar {
+  font-family: var(--font-family);
+  background-color: var(--primary-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.navbar-expand {
+  background-color: var(--color-footer);
+}
+.navbar-brand {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+.navbar-brand:hover {
+  color: var(--primary-color);
+}
+
+.navbar-nav {
+  display: flex;
+}
+.nav-link {
+  color: #fff;
+}
+
+.nav-link:hover {
+  color: var(--primary-color);
+}
+
+.navbar-custom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-left .navbar-nav,
+.nav-right .navbar-nav {
+  display: flex;
+  gap: 10px; /* Optionnel : espace entre les liens de la navbar  */
+}
