@@ -5,7 +5,7 @@
   --color-footer: rgb(25, 135, 84);
   --secondary-color: #d2f4b0;
   --color-body: #f2faf2;
-  --text-color: #666262;
+  --text-color: #7b7878;
   --font-family: "Roboto", sans-serif;
   --font-size: 1.2rem;
   --font-weight: 400;
@@ -30,7 +30,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--title-color);
+  color: var(--text-color);
 }
 
 /*  NavBar  */
@@ -82,4 +82,25 @@ h6 {
 .nav-right .navbar-nav {
   display: flex;
   gap: 10px; /* Optionnel : espace entre les liens de la navbar  */
+}
+
+
+/* Footer  */
+
+.footer-custom{
+  background-color: var(--color-footer);
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer-link{
+  color: #fff;
+  text-decoration: none;
+}
+.footer-link:hover {
+  color: var(--primary-color);
 }
