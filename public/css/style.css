@@ -184,7 +184,7 @@ h6 {
   filter: invert(100%);
 }
 
-/* Responsive */
+/* Responsive  */
 @media (max-width: 768px) {
   #hero {
     height: 75vh;
