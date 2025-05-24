@@ -4,8 +4,9 @@
   --primary-color: #6ca138;
   --color-footer: rgb(25, 135, 84);
   --secondary-color: #d2f4b0;
-  --color-body: #f2faf2;
+  --color-body: #baeaba;
   --text-color: #7b7878;
+  --text-color-light: #f8f9fa;
   --font-family: "Roboto", sans-serif;
   --font-size: 1.2rem;
   --font-weight: 400;
@@ -45,7 +46,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--text-color);
+  color: var(--text-color-light);
 }
 
 /*  NavBar  */
@@ -117,6 +118,112 @@ h6 {
   color: var(--primary-color);
 }
 
-.list-inline-item:hover{
-    color: var(--primary-color);
+.list-inline-item:hover {
+  color: var(--primary-color);
+}
+
+/* Home Page  */
+/* Carrousel pleine largeur  */
+
+#hero {
+  margin-top: 70px;
+  padding-top: 0 !important;
+}
+
+#heroCarousel {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  overflow-x: hidden;
+}
+
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  max-width: 100vw;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow-x: hidden;
+}
+
+/* Ajustement des images du carrousel */
+.hero-img {
+  width: 100%;
+  height: 60vh;
+  object-fit: cover;
+  object-position: center 30%; /* Descendre légèrement l'image */
+}
+
+/* Overlay contenant le formulaire */
+.hero-overlay {
+  position: absolute;
+  top: 50%; /* Ajuste la hauteur pour centrer mieux */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.4); /* Fond semi-transparent pour la lisibilité */
+  padding: 20px;
+  border-radius: 15px;
+}
+
+/* Ajustement du formulaire */
+.hero-overlay form {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+/* Boutons du carrousel */
+.carousel-control-prev,
+.carousel-control-next {
+  filter: invert(100%);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #hero {
+    height: 75vh;
+  }
+
+  .hero-img {
+    height: 75vh;
+  }
+
+  .hero-overlay {
+    top: 55%;
+    width: 90%;
+  }
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #327ceb;
+}
+
+/* Section carte du HomePage  */
+
+.card {
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+.card:hover {
+  box-shadow: 0 8px 24px rgba(42, 42, 42, 0.15);
+  transform: translateY(-5px);
+}
+
+.value-icon {
+  font-size: 2.5rem;
+}
+
+.card-img-top {
+  border-radius: 5px;
+  height: 200px;
+  object-fit: cover;
+  cursor: pointer;
 }
