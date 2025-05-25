@@ -1,7 +1,7 @@
 /* css */
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 :root {
-  --primary-color: rgb(183, 234, 135);
+  --primary-color: rgb(227, 241, 214);
   --color-footer: rgb(25, 135, 84);
   --secondary-color: #fefefe;
   --color-body: #d9f3dc;
@@ -212,6 +212,7 @@ h6 {
 .card {
   transition: all 0.3s ease-in-out;
   cursor: pointer;
+  background-color: var(--color-body);
 }
 .card:hover {
   box-shadow: 0 8px 24px rgba(42, 42, 42, 0.15);
