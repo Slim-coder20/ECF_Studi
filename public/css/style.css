@@ -1,7 +1,7 @@
 /* css */
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 :root {
-  --primary-color: #6ca138;
+  --primary-color: rgb(183, 234, 135);
   --color-footer: rgb(25, 135, 84);
   --secondary-color: #fefefe;
   --color-body: #d9f3dc;
@@ -54,7 +54,7 @@ h6 {
 
 .navbar {
   font-family: var(--font-family);
-  background-color: var(--primary-color);
+  background-color: var(--color-footer);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   padding: 10px 20px;
   z-index: 1000;
@@ -85,7 +85,7 @@ h6 {
 }
 
 .nav-link:hover {
-  color: var(--primary-color);
+  color: #30d69c
 }
 
 .navbar-custom {
