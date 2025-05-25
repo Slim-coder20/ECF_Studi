@@ -3,5 +3,48 @@
 {% block title %}Ecoride | Contact{% endblock %}
 
 {% block body %}
+	<div class="py-5 ">
+		<div class="container py-5 ">
+			<div
+				class="row justify-content-center align-items-start align-items-enter g-4">
 
+			
+
+				<!-- Colonne formulaire -->
+				<div class="col-lg-5  p-5 py-4 rounded-4 shadow mt-5" data-aos="fade-left">
+					<h2 class="text-success text-center mb-4" data-aos="fade-up">📨 Contactez-nous</h2>
+
+					{{ form_start(formContact) }}
+
+					<div class="form-group mb-3" data-aos="fade-up" data-aos-delay="100">
+						{{ form_row(formContact.firstname, {attr:{'class': 'form form-control mt-2 '}}) }}
+					</div>
+
+					<div class="form-group mb-3" data-aos="fade-up" data-aos-delay="200">
+						{{ form_row(formContact.lastname, {attr:{'class': 'form form-control mt-2'}}) }}
+					</div>
+
+					<div class="form-group mb-3" data-aos="fade-up" data-aos-delay="300">
+						{{ form_row(formContact.email, {attr:{'class': 'form form-control mt-2'}}) }}
+					</div>
+
+					<div class="form-group mb-3" data-aos="fade-up" data-aos-delay="400">
+						{{ form_row(formContact.subject, {attr:{'class': 'form form-control mt-2'}}) }}
+					</div>
+
+					<div class="form-group mb-3" data-aos="fade-up" data-aos-delay="500">
+						{{ form_row(formContact.message, {attr:{'class': 'form form-control mt-2'}}) }}
+					</div>
+
+					<div class="text-center" data-aos="fade-up" data-aos-delay="600">
+						<button type="submit" class="btn btn-success w-100">Envoyer</button>
+					</div>
+
+					{{ form_end(formContact) }}
+
+				</div>
+
+			</div>
+		</div>
+	</div>
 {% endblock %}
