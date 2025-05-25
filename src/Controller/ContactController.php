@@ -49,7 +49,7 @@ final class ContactController extends AbstractController
             );
 
             // Ajout d'un message flash
-            $this->addFlash('success', 'Votre message a bien été envoyé.');
+            $this->addFlash('success', 'votre message a bien été envoyé merci de nous avoir contacté .');
             // Redirection vers la page de contact
             return $this->redirectToRoute('app_contact');
         }

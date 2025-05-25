@@ -3,8 +3,8 @@
 :root {
   --primary-color: #6ca138;
   --color-footer: rgb(25, 135, 84);
-  --secondary-color: #d2f4b0;
-  --color-body: #baeaba;
+  --secondary-color: #fefefe;
+  --color-body: #d9f3dc;
   --text-color: #7b7878;
   --text-color-light: #f8f9fa;
   --font-family: "Roboto", sans-serif;
@@ -38,6 +38,7 @@ body {
 }
 main {
   flex: 1; /* prend tout l'espace restant */
+  margin-top: 100px; /* espace pour la navbar */
 }
 
 h1,
@@ -227,3 +228,4 @@ h6 {
   object-fit: cover;
   cursor: pointer;
 }
+
