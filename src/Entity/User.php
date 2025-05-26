@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -45,10 +47,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
+    /**
+     * @var Collection<int, Trajet>
+     */
+    #[ORM\OneToMany(targetEntity: Trajet::class, mappedBy: 'chauffeur')]
+    private Collection $trajets;
+
     public function __construct()
     {
         $this->credits = 20; // création d'un utilisateur avec 20 crédits par défaut
         $this->roles = ['ROLE_USER']; // assignation du rôle par défaut
+        $this->trajets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -168,6 +177,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Trajet>
+     */
+    public function getTrajets(): Collection
+    {
+        return $this->trajets;
+    }
+
+    public function addTrajet(Trajet $trajet): static
+    {
+        if (!$this->trajets->contains($trajet)) {
+            $this->trajets->add($trajet);
+            $trajet->setChauffeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrajet(Trajet $trajet): static
+    {
+        if ($this->trajets->removeElement($trajet)) {
+            // set the owning side to null (unless already changed)
+            if ($trajet->getChauffeur() === $this) {
+                $trajet->setChauffeur(null);
+            }
+        }
 
         return $this;
     }
