@@ -74,7 +74,7 @@ h6 {
   align-items: center;
 }
 .navbar-brand:hover {
-  color:  #30d69c;
+  color: #30d69c;
 }
 
 .navbar-nav {
@@ -82,10 +82,11 @@ h6 {
 }
 .nav-link {
   color: #fff;
+  cursor: pointer;
 }
 
 .nav-link:hover {
-  color: #30d69c
+  color: #30d69c;
 }
 
 .navbar-custom {

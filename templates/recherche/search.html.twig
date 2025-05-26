@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ecoride | Rechercher{% endblock %}
+
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="text-center text-success">Rechercher un trajet</h1>
+
+    {{ form_start(form) }}<br>
+        <div class="row my-1">
+            
+            <div class="col-md-4 text-success">
+                {{ form_row(form.villeDepart) }}
+            </div>
+            <div class="col-md-4 text-success">
+                {{ form_row(form.villeArrivee) }}
+            </div>
+            <div class="col-md-4 text-success">
+                {{ form_row(form.date) }}
+            </div>
+        </div>
+        <button class="btn btn-success w-100 mt-3">Rechercher</button>
+    {{ form_end(form) }}
+
+    <hr>
+
+    
+</div>
+{% endblock %}
+
+
+
