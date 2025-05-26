@@ -32,10 +32,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?int $credits = null;
+    private ?int $credits = 20;
 
     #[ORM\Column(length: 255)]
     private ?string $pseudo = null;
+
+    public function __construct()
+    {
+        $this->credits = 20; // création d'un utilisateur avec 20 crédits par défaut
+        $this->roles = ['ROLE_USER']; // assignation du rôle par défaut
+    }
 
     public function getId(): ?int
     {
