@@ -12,15 +12,15 @@
 				<p class="text-center text-success">Accédez à votre compte pour réserver et proposer des trajets.</p>
 
 				<div class="card shadow p-4 ">
-					<form method="post">
+					<form method="post" action="{{ path('app_login') }}">
 						<div class="mb-3">
-							<label for="username" class="form-label text-success">Email</label>
-							<input type="email" id="username" name="_username" class="form-control" value="{{ last_username }}" required autofocus>
+							<label for="email" class="form-label text-success">Email</label>
+							<input type="text" id="email" name="email" class="form-control" value="{{ last_username }}" required autofocus>
 						</div>
 
 						<div class="mb-3">
 							<label for="password" class="form-label text-success">Mot de passe</label>
-							<input type="password" id="password" name="_password" class="form-control" required>
+							<input type="password" id="password" name="password" class="form-control" required>
 						</div>
 
 						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
