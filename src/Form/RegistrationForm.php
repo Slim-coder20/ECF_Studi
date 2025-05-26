@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class RegistrationForm extends AbstractType
 {
@@ -19,39 +20,65 @@ class RegistrationForm extends AbstractType
     {
         $builder
             ->add('pseudo', TextType::class,[
-                'label' => 'Non d\'utilisateur',
+                'label' => 'Nom d\'utilisateur',
+                'label_attr' => [
+                    'class' => 'text-success',
+                ],
                 'attr' => ['placeholder' => 'Entrez votre nom d\'utilisateur'],
                 
                 ])
             ->add('firstName', TextType::class, [
                 'label' => 'Prénom',
+                'label_attr' => [
+                    'class' => 'text-success',
+                ],
                 'attr' => ['placeholder' => 'Entrez votre prénom'],
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Nom',
+                'label_attr' => [
+                    'class' => 'text-success',
+                ],
                 'attr' => ['placeholder' => 'Entrez votre nom'],
             ])
-            ->add('email',)
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'label_attr' => [
+                    'class' => 'text-success',
+                ],
+                'attr' => ['placeholder' => 'Entrez votre adresse e-mail'],
+            ])
             ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
+                'label' => 'Mot de passe',
+                'label_attr' => [
+                    'class' => 'text-success',
+                ],
+                'attr' => ['placeholder' => 'Entrez votre mot de passe'],
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Entrez votre mot de passe',
                     ]),
                     new Length([
-                        'min' => 6,
+                        'min' => 8,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
-                        'max' => 4096,
+                        'max' => 12,
                     ]),
                 ],
             ])
         
             ->add('agreeTerms', CheckboxType::class, [
-                                'mapped' => false,
+                'label' => 'J\'accepte les termes et conditions',
+                'label_attr' => [
+                    'class' => 'text-success',
+                ],
+                'attr' => [
+                    'class' => 'form-check-input',
+                ],
+                'required' => false,
+                'mapped' => false,
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
