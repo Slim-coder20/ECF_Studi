@@ -31,9 +31,9 @@
                 <p>Date : {{ trajet.dateDepart|date('d/m/Y H:i') }}</p>
                 <p>Places restantes : {{ trajet.nbPlaces }}</p>
                 <p>Prix : {{ trajet.prix }} €</p>
-                {% if trajet.vehicule and trajet.vehicule.isElectrique %}
+                {# {% if trajet.vehicule and trajet.vehicule.isElectrique %}
                     <p class="text-success">🌱 Voyage écologique</p>
-                {% endif %}
+                {% endif %} #}
                 <a href="{{ path('trajet_detail', { id: trajet.id }) }}" class="btn btn-outline-success">Détail</a>
             </div>
         {% endfor %}
