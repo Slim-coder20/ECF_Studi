@@ -17,59 +17,54 @@ class TrajetRepository extends ServiceEntityRepository
         parent::__construct($registry, Trajet::class);
     }
 
-//    /**
-//     * @return Trajet[] Returns an array of Trajet objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * Recherche des trajets selon les critères du formulaire.
+     */
+    public function findBySearch(TrajetSearch $search): array
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->andWhere('t.nbPlaces > 0');
 
-//    public function findOneBySomeField($value): ?Trajet
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
-    // Cette méthode permet de rechercher des trajets en fonction des critères de recherche fournis.
+        $joinedChauffeur = false;
 
+        if ($search->noteMin) {
+            $qb->leftJoin('t.chauffeur', 'u')
+               ->addSelect('u')
+               ->andWhere('u.note >= :note')
+               ->setParameter('note', $search->noteMin);
+            $joinedChauffeur = true;
+        }
 
-public function findBySearch(TrajetSearch $search): array
-{
-    $qb = $this->createQueryBuilder('t')
-        ->andWhere('t.nbPlaces > 0');
+        if ($search->villeDepart) {
+            $qb->andWhere('t.villeDepart LIKE :vd')
+               ->setParameter('vd', '%' . $search->villeDepart . '%');
+        }
 
-    if ($search->villeDepart) {
-        $qb->andWhere('t.villeDepart LIKE :vd')
-           ->setParameter('vd', '%' . $search->villeDepart . '%');
-    }
+        if ($search->villeArrivee) {
+            $qb->andWhere('t.villeArrivee LIKE :va')
+               ->setParameter('va', '%' . $search->villeArrivee . '%');
+        }
 
-    if ($search->villeArrivee) {
-        $qb->andWhere('t.villeArrivee LIKE :va')
-           ->setParameter('va', '%' . $search->villeArrivee . '%');
-    }
-
-    if ($search->date) {
-        $dateStart = (clone $search->date)->setTime(0, 0, 0);
-        $dateEnd = (clone $search->date)->setTime(23, 59, 59);
+       if ($search->date) {
+        $startDate = (clone $search->date)->setTime(0, 0, 0);
+        $endDate = (clone $search->date)->setTime(23, 59, 59);
 
         $qb->andWhere('t.dateDepart BETWEEN :start AND :end')
-           ->setParameter('start', $dateStart)
-           ->setParameter('end', $dateEnd);
+        ->setParameter('start', $startDate)
+        ->setParameter('end', $endDate);
+       }
+
+
+        if ($search->prixMax) {
+            $qb->andWhere('t.prix <= :prixMax')
+               ->setParameter('prixMax', $search->prixMax);
+        }
+
+        if ($search->dureeMax) {
+            $qb->andWhere('TIMESTAMPDIFF(MINUTE, t.dateDepart, t.dateArrivee) <= :duree')
+               ->setParameter('duree', $search->dureeMax);
+        }
+
+        return $qb->getQuery()->getResult();
     }
-
-    return $qb->getQuery()->getResult();
-}
-
-
 }

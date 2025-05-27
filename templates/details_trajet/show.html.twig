@@ -25,7 +25,7 @@
             <div class="card shadow p-4">
                 <h4 class="text-success"> 🌱 Chauffeur</h4>
 
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center ">
                     {% if trajet.chauffeur.photo %}
                         <img src="{{ asset('uploads/photos/' ~ trajet.chauffeur.photo) }}"
                              alt="Photo du chauffeur"
@@ -38,6 +38,7 @@
                         <p><strong class="text-success">Nom :</strong> {{ trajet.chauffeur.lastName }}</p>
                         <p><strong class="text-success">Prénom :</strong> {{ trajet.chauffeur.firstName }}</p>
                         <p><strong class="text-success">Email :</strong> {{ trajet.chauffeur.email }}</p>
+                        <p><strong class="text-success">Note :</strong> {{ trajet.chauffeur.note }}</p>
                     </div>
                 </div>
             </div>
