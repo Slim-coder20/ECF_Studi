@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 
 class RegistrationForm extends AbstractType
 {
@@ -68,6 +70,29 @@ class RegistrationForm extends AbstractType
                     ]),
                 ],
             ])
+
+            ->add('photo', FileType::class, [
+                'label' => 'Photo de profil',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif',
+                            'image/webp',
+                            'image/jpg',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG, GIF, WebP)',
+                    ]),
+                ],
+                'label_attr' => [
+                    'class' => 'text-success',
+                ],
+                'attr' => ['placeholder' => 'Entrez l\'URL de votre photo de profil'],
+            ])
         
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'J\'accepte les termes et conditions',
@@ -81,7 +106,7 @@ class RegistrationForm extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter nos conditions.',
                     ]),
                 ],
             ])

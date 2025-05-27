@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DataFixtures;
 
 use App\Entity\User;
@@ -9,19 +10,40 @@ use Doctrine\Persistence\ObjectManager;
 class TrajetFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
-    {
-        // Création d'un utilisateur fictif (chauffeur)
+{
+    // Récuprérer l'utilisateur depuis l'email via le getRepository // 
+    $lucie = $manager->getRepository(User::class)->findOneBy(['email' => 'luciedupont@gmail.com']);
+
+    if ($lucie) {
+        $trajetLucie = new Trajet();
+        $trajetLucie->setVilleDepart('Lille');
+        $trajetLucie->setVilleArrivee('Paris');
+        $trajetLucie->setDateDepart(new \DateTime('+1 day 07:30'));
+        $trajetLucie->setDateArrivee(new \DateTime('+1 day 10:00'));
+        $trajetLucie->setNbPlaces(2);
+        $trajetLucie->setPrix(15.00);
+        $trajetLucie->setChauffeur($lucie);
+
+        $manager->persist($trajetLucie);
+    } else {
+        dump('Lucie introuvable — pas de trajet créé pour elle.');
+    }
+
+    // 
+    $existing = $manager->getRepository(User::class)->findOneBy(['email' => 'chauffeur@test.com']);
+
+    if (!$existing) {
         $chauffeur = new User();
         $chauffeur->setEmail('chauffeur@test.com');
-        $chauffeur->setPassword('password'); 
+        $chauffeur->setPassword('password'); // non hashé pour tests
         $chauffeur->setFirstName('John');
         $chauffeur->setLastName('Doe');
         $chauffeur->setPseudo('GreenDriver');
         $chauffeur->setRoles(['ROLE_USER']);
+        $chauffeur->setPhoto('default.jpg');
 
         $manager->persist($chauffeur);
 
-        // Création de trajets
         for ($i = 0; $i < 5; $i++) {
             $trajet = new Trajet();
             $trajet->setVilleDepart('Paris');
@@ -34,7 +56,65 @@ class TrajetFixtures extends Fixture
 
             $manager->persist($trajet);
         }
-
-        $manager->flush();
+    } else {
+        dump('chauffeur@test.com existe déjà — utilisateur ignoré');
     }
+
+    $manager->flush();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

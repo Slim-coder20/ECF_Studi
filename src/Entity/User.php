@@ -53,6 +53,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Trajet::class, mappedBy: 'chauffeur')]
     private Collection $trajets;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
+
     public function __construct()
     {
         $this->credits = 20; // création d'un utilisateur avec 20 crédits par défaut
@@ -207,6 +210,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $trajet->setChauffeur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): static
+    {
+        $this->photo = $photo;
 
         return $this;
     }

@@ -21,20 +21,20 @@
     <button class="btn btn-success w-100 mt-3">Rechercher</button>
     {{ form_end(form) }}
 
-    <hr>
+    
 
     {% if trajets is not empty %}
-        <h2 class="mt-5">Résultats :</h2>
+        <h2 class="mt-5 text-success">🌱 Résultats 🌱</h2>
         {% for trajet in trajets %}
             <div class="card my-3 p-3">
-                <h5>Trajet de {{ trajet.villeDepart }} à {{ trajet.villeArrivee }}</h5>
+                <h5 class="text-success">Trajet de {{ trajet.villeDepart }} à {{ trajet.villeArrivee }}</h5>
                 <p>Date : {{ trajet.dateDepart|date('d/m/Y H:i') }}</p>
                 <p>Places restantes : {{ trajet.nbPlaces }}</p>
                 <p>Prix : {{ trajet.prix }} €</p>
                 {# {% if trajet.vehicule and trajet.vehicule.isElectrique %}
                     <p class="text-success">🌱 Voyage écologique</p>
                 {% endif %} #}
-                <a href="{{ path('trajet_detail', { id: trajet.id }) }}" class="btn btn-outline-success">Détail</a>
+                <a href="{{ path('app_details_trajet', { id: trajet.id }) }}" class="btn btn-outline-success">Détail</a>
             </div>
         {% endfor %}
     {% elseif form.vars.submitted %}

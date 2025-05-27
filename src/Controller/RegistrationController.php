@@ -25,8 +25,24 @@ class RegistrationController extends AbstractController
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
+            // hasher le mot de passe // 
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+
+            // Traitement de l'image // 
+
+            $photoFile = $form->get('photo')->getData();
+
+            if ($photoFile) {
+            $newFilename = uniqid().'.'.$photoFile->guessExtension();
+
+            $photoFile->move(
+            $this->getParameter('photos_directory'),
+            $newFilename
+        
+        );
+
+            $user->setPhoto($newFilename);
+    }
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -37,6 +53,8 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('app_login');
         }
+
+        
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
