@@ -4,33 +4,47 @@
 
 {% block body %}
 <div class="container my-5">
-    <h1 class="text-success text-center"> 🌱 Détail du trajet 🌱 </h1>
+    <h1 class="text-center text-success"> 🌱 Détail du trajet 🌱</h1><br>
 
-    <div class="card p-4">
-        <h3 class="mb-3 text-success"> 🌱 Trajet</h3>
-        <p><strong class="text-success">Départ :</strong> {{ trajet.villeDepart }}</p>
-        <p><strong class="text-success">Arrivée :</strong> {{ trajet.villeArrivee }}</p>
-        <p><strong class="text-success">Date de départ :</strong> {{ trajet.dateDepart|date('d/m/Y H:i') }}</p>
-        <p><strong class="text-success">Date d’arrivée :</strong> {{ trajet.dateArrivee|date('d/m/Y H:i') }}</p>
-        <p><strong class="text-success">Places restantes :</strong> {{ trajet.nbPlaces }}</p>
-        <p><strong class="text-success">Prix :</strong> {{ trajet.prix }} €</p>
+    <div class="row">
+        <!-- Carte 1 : Infos du trajet -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow p-4">
+                <h4 class="text-success"> 🌱 Trajet</h4>
+                <p><strong class="text-success">Départ :</strong> {{ trajet.villeDepart }}</p>
+                <p><strong class="text-success">Arrivée :</strong> {{ trajet.villeArrivee }}</p>
+                <p><strong class="text-success">Date de départ :</strong> {{ trajet.dateDepart|date('d/m/Y H:i') }}</p>
+                <p><strong class="text-success">Date d’arrivée :</strong> {{ trajet.dateArrivee|date('d/m/Y H:i') }}</p>
+                <p><strong class="text-success"> Places restantes :</strong> {{ trajet.nbPlaces }}</p>
+                <p><strong class="text-success">Prix :</strong> {{ trajet.prix }} €</p>
+            </div>
+        </div>
 
-        <hr> 
+        <!-- Carte 2 : Infos chauffeur avec photo à gauche -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow p-4">
+                <h4 class="text-success"> 🌱 Chauffeur</h4>
 
-        <h3 class="mb-3 text-success"> 🌱 Chauffeur</h3>
-        <p><strong class="text-success">Pseudo :</strong> {{ trajet.chauffeur.pseudo }}</p>
-        <p><strong class="text-success">Nom :</strong> {{ trajet.chauffeur.lastName }}</p>
-        <p><strong class="text-success">Prénom :</strong> {{ trajet.chauffeur.firstName }}</p>
-        <p><strong class="text-success">Email :</strong> {{ trajet.chauffeur.email }}</p>
+                <div class="d-flex align-items-center">
+                    {% if trajet.chauffeur.photo %}
+                        <img src="{{ asset('uploads/photos/' ~ trajet.chauffeur.photo) }}"
+                             alt="Photo du chauffeur"
+                             class="rounded-circle me-3"
+                             style="width: 80px; height: 80px; object-fit: cover;">
+                    {% endif %}
 
-        {% if trajet.chauffeur.photo %}
-            <img src="{{ asset('uploads/photos/' ~ trajet.chauffeur.photo) }}" alt="Photo du chauffeur" class="rounded mt-2" width="150">
-        {% else %}
-            <p><em>Aucune photo disponible</em></p>
-        {% endif %}
+                    <div>
+                        <p><strong class="text-success">Pseudo :</strong> {{ trajet.chauffeur.pseudo }}</p>
+                        <p><strong class="text-success">Nom :</strong> {{ trajet.chauffeur.lastName }}</p>
+                        <p><strong class="text-success">Prénom :</strong> {{ trajet.chauffeur.firstName }}</p>
+                        <p><strong class="text-success">Email :</strong> {{ trajet.chauffeur.email }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <a href="{{ path('app_search') }}" class="btn btn-outline-success mt-4 ">← Retour à la recherche</a>
-    <a href="{{path('app_login')}}" class="btn btn-outline-success mt-4">Participer au trajet</a>
+    <a href="{{ path('app_search') }}" class="btn btn-outline-success">Rechercher un Trajet</a>
+    <a href="{{ path('app_login') }}" class="btn btn-outline-success">Participer à un trajet</a>
 </div>
 {% endblock %}
