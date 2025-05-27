@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Trajet;
+use App\Model\TrajetSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,35 @@ class TrajetRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    // Cette méthode permet de rechercher des trajets en fonction des critères de recherche fournis.
+
+
+public function findBySearch(TrajetSearch $search): array
+{
+    $qb = $this->createQueryBuilder('t')
+        ->andWhere('t.nbPlaces > 0');
+
+    if ($search->villeDepart) {
+        $qb->andWhere('t.villeDepart LIKE :vd')
+           ->setParameter('vd', '%' . $search->villeDepart . '%');
+    }
+
+    if ($search->villeArrivee) {
+        $qb->andWhere('t.villeArrivee LIKE :va')
+           ->setParameter('va', '%' . $search->villeArrivee . '%');
+    }
+
+    if ($search->date) {
+        $dateStart = (clone $search->date)->setTime(0, 0, 0);
+        $dateEnd = (clone $search->date)->setTime(23, 59, 59);
+
+        $qb->andWhere('t.dateDepart BETWEEN :start AND :end')
+           ->setParameter('start', $dateStart)
+           ->setParameter('end', $dateEnd);
+    }
+
+    return $qb->getQuery()->getResult();
+}
+
+
 }
