@@ -56,14 +56,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $note = null;
-
     public function __construct()
     {
         $this->credits = 20; // création d'un utilisateur avec 20 crédits par défaut
         $this->roles = ['ROLE_USER']; // assignation du rôle par défaut
         $this->trajets = new ArrayCollection();
+        $this->avis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -225,18 +223,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoto(?string $photo): static
     {
         $this->photo = $photo;
-
-        return $this;
-    }
-
-    public function getNote(): ?float
-    {
-        return $this->note;
-    }
-
-    public function setNote(?float $note): static
-    {
-        $this->note = $note;
 
         return $this;
     }
