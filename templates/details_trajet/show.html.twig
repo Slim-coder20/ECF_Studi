@@ -38,7 +38,7 @@
                         <p><strong class="text-success">Nom :</strong> {{ trajet.chauffeur.lastName }}</p>
                         <p><strong class="text-success">Prénom :</strong> {{ trajet.chauffeur.firstName }}</p>
                         <p><strong class="text-success">Email :</strong> {{ trajet.chauffeur.email }}</p>
-                        <p><strong class="text-success">Note :</strong> {{ trajet.chauffeur.note }}</p>
+                        <p><strong class="text-success">Note :</strong> {{ trajet.chauffeur.moyenneAvis ?? 'Pas encore noté'}}</p>
                     </div>
                 </div>
             </div>

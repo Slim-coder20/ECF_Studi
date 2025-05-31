@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\Avis;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -23,15 +24,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
@@ -47,151 +42,104 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
-    /**
-     * @var Collection<int, Trajet>
-     */
     #[ORM\OneToMany(targetEntity: Trajet::class, mappedBy: 'chauffeur')]
     private Collection $trajets;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
+    #[ORM\OneToMany(mappedBy: 'chauffeur', targetEntity: Avis::class)]
+    private Collection $avis;
+
     public function __construct()
     {
-        $this->credits = 20; // création d'un utilisateur avec 20 crédits par défaut
-        $this->roles = ['ROLE_USER']; // assignation du rôle par défaut
+        $this->credits = 20;
+        $this->roles = ['ROLE_USER'];
         $this->trajets = new ArrayCollection();
         $this->avis = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    // ... autres getters/setters ...
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
+    public function getId(): ?int { return $this->id; }
+
+    public function getEmail(): ?string { return $this->email; }
 
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
+    public function getUserIdentifier(): string { return (string) $this->email; }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
+    public function getPassword(): ?string { return $this->password; }
 
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
+    public function eraseCredentials(): void {}
 
-    public function getCredits(): ?int
-    {
-        return $this->credits;
-    }
+    public function getCredits(): ?int { return $this->credits; }
 
     public function setCredits(int $credits): static
     {
         $this->credits = $credits;
-
         return $this;
     }
 
-    public function getPseudo(): ?string
-    {
-        return $this->pseudo;
-    }
+    public function getPseudo(): ?string { return $this->pseudo; }
 
     public function setPseudo(string $pseudo): static
     {
         $this->pseudo = $pseudo;
-
         return $this;
     }
 
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
+    public function getFirstName(): ?string { return $this->firstName; }
 
     public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
-
         return $this;
     }
 
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
+    public function getLastName(): ?string { return $this->lastName; }
 
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
+        return $this;
+    }
 
+    public function getPhoto(): ?string { return $this->photo; }
+
+    public function setPhoto(?string $photo): static
+    {
+        $this->photo = $photo;
         return $this;
     }
 
     /**
      * @return Collection<int, Trajet>
      */
-    public function getTrajets(): Collection
-    {
-        return $this->trajets;
-    }
+    public function getTrajets(): Collection { return $this->trajets; }
 
     public function addTrajet(Trajet $trajet): static
     {
@@ -206,7 +154,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeTrajet(Trajet $trajet): static
     {
         if ($this->trajets->removeElement($trajet)) {
-            // set the owning side to null (unless already changed)
             if ($trajet->getChauffeur() === $this) {
                 $trajet->setChauffeur(null);
             }
@@ -215,15 +162,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhoto(): ?string
+    /**
+     * @return Collection<int, Avis>
+     */
+    public function getAvis(): Collection
     {
-        return $this->photo;
+        return $this->avis;
     }
 
-    public function setPhoto(?string $photo): static
+    public function getMoyenneAvis(): ?float
     {
-        $this->photo = $photo;
+        if ($this->avis->isEmpty()) {
+            return null;
+        }
 
-        return $this;
+        $total = 0;
+        foreach ($this->avis as $avis) {
+            $total += $avis->getNote();
+        }
+
+        return round($total / count($this->avis), 1);
     }
 }
