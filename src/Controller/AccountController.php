@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Vehicule;
+use Dom\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Form\VehiculeTypeForm;
 
 final class AccountController extends AbstractController
 {   
@@ -28,4 +33,52 @@ final class AccountController extends AbstractController
             'user' => $user,
         ]);
     }
+    
+    
+    #[Route('/compte/vehicules', name: 'app_account_vehicules')]
+    public function vehicules(Request $request, EntityManagerInterface $entityManager): Response
+
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            // Si l'utilisateur n'est pas connecté, on redirige vers la page de connexion
+            return $this->redirectToRoute('app_login');
+        }
+        $vehicule = new Vehicule();
+        $form = $this->createForm(VehiculeTypeForm::class, $vehicule);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vehicule->setProprietaire($user);
+            $entityManager->persist($vehicule);
+            $entityManager->flush();
+
+            // Ajout d'un message flash pour informer l'utilisateur de la réussite de l'ajout
+            $this->addFlash('success', 'Véhicule ajouté avec succès !');
+
+            // Redirection vers la page des véhicules après l'ajout
+            return $this->redirectToRoute('app_account');
+        }
+
+        
+        return $this->render('account/vehicules.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

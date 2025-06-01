@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ecoride | Devenir chauffeur
+{% endblock %}
+
+
+{% block body %}
+	<div class="container mt-5">
+		<h1 class="text-success text-center"> 🌱 Enregistrez votre véhicule  🌱</h1>
+
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		<button class="btn btn-outline-success mt-3">Ajouter un véhicule</button>
+		
+		{{ form_end(form) }}
+	</div>
+
+{% endblock %}
