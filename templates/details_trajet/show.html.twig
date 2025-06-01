@@ -8,7 +8,7 @@
 
     <div class="row">
         <!-- Carte 1 : Infos du trajet -->
-        <div class="col-md-6 mb-4">
+        <div class="col-md-4 mb-4">
             <div class="card shadow p-4">
                 <h4 class="text-success"> 🌱 Trajet</h4>
                 <p><strong class="text-success">Départ :</strong> {{ trajet.villeDepart }}</p>
@@ -21,7 +21,7 @@
         </div>
 
         <!-- Carte 2 : Infos chauffeur avec photo à gauche -->
-        <div class="col-md-6 mb-4">
+        <div class="col-md-4 mb-4">
             <div class="card shadow p-4">
                 <h4 class="text-success"> 🌱 Chauffeur</h4>
 
@@ -43,7 +43,26 @@
                 </div>
             </div>
         </div>
+        <!-- Avis sur le conducteur --> 
+      <div class="col-md-4 mb-4">
+    <div class="card shadow p-4">
+        <h4 class="text-success">🌱 Avis sur le conducteur</h4>
+        {% if trajet.chauffeur.avis|length > 0 %}
+            {% for avis in trajet.chauffeur.avis %}
+                <div class="border-bottom pb-2 mb-2">
+                    <span class="badge bg-success">Note : {{ avis.note }} / 5</span>
+                    {% if avis.commentaire %}
+                        <strong>Commentaire :</strong> {{ avis.commentaire }}<br>
+                    {% endif %}
+                    <small class="text-muted">Posté le {{ avis.date|date('d/m/Y') }}
+                    par {{ avis.auteur.pseudo }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucun avis pour ce conducteur.</p>
+        {% endif %}
     </div>
+</div>
 
     <a href="{{ path('app_search') }}" class="btn btn-outline-success">Rechercher un Trajet</a>
     <a href="{{ path('app_login') }}" class="btn btn-outline-success">Participer à un trajet</a>
