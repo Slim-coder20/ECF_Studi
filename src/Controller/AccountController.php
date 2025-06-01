@@ -34,6 +34,7 @@ final class AccountController extends AbstractController
         ]);
     }
     
+    // cette route permet d'jouter un véhicule si l'utilsateur souhaite passer en mode conducteur // 
     
     #[Route('/compte/vehicules', name: 'app_account_vehicules')]
     public function vehicules(Request $request, EntityManagerInterface $entityManager): Response
@@ -51,7 +52,7 @@ final class AccountController extends AbstractController
             $vehicule->setProprietaire($user);
             
             // traiter l'image si elle est présente
-            $imageFile = $form->get('image')->getData();
+            $imageFile = $form->get('photo')->getData();
             if ($imageFile) {
                 $newFilename = uniqid() . '.' . $imageFile->guessExtension();
                 $imageFile->move(
