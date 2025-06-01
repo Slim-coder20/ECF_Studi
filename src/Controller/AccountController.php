@@ -31,6 +31,7 @@ final class AccountController extends AbstractController
         
         return $this->render('account/account.html.twig', [
             'user' => $user,
+             'vehicules' => $user->getVehicules(), 
         ]);
     }
     
@@ -79,19 +80,96 @@ final class AccountController extends AbstractController
     }
 
 
+    // cette route permet de modifier les informations concernat le véhicule créé par l'utilisateur // 
+    #[Route('/compte/vehicule/modifier/{id}', name: 'app_account_vehicule_edit')]
+    public function editVehicule(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManagerInterface): Response 
+    {
+        // Vérifie que l'utilisateur est bien le propriétaire du véhicule// 
+        $this->denyAccessUnlessGranted('IS_AUTHETICATED_FULLY');
+         if ($vehicule->getProprietaire() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+    
+        $form = $this->createForm(VehiculeTypeForm::class, $vehicule);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            // Traite l'image si elle est présente
+            $imageFile = $form->get('photo')->getData();
+            if ($imageFile) {
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+                $imageFile->move(
+                    $this->getParameter('photos_directory'),
+                    $newFilename
+                );
+                $vehicule->setPhoto($newFilename);
+            }
+            
+            $entityManagerInterface->flush();
+            // Ajout d'un message flash pour informer l'utilisateur de la réussite de la modification
+            $this->addFlash('success', 'Véhicule modifié avec succès !');
+            // Redirection vers la page des véhicules après la modification
+            return $this->redirectToRoute('app_account');
+        
+        
+        }
+    
+        return $this->render('account/vehicule_edit.html.twig', [
+            'form' => $form->createView(),
+            
+        ]);
+    
+    }
 
+    // cette route permet de supprimer le véhicule créé par l'utilisateur //
+    #[Route('/compte/vehicule/supprimer/{id}', name: 'app_account_vehicule_delete', methods: ['POST'])]
+    public function deleteVehicule(Vehicule $vehicule, EntityManagerInterface $entityManagerInterface, Request $request): Response
+    {
+        // Vérifie que l'utilisateur est bien le propriétaire du véhicule
+        if (!$vehicule->getProprietaire() || $vehicule->getProprietaire()->getId() !== $this->getUser()->getId()) {
+        throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer ce véhicule.');
+       }
+        
 
+         if($this->isCsrfTokenValid('delete'.$vehicule->getId(), $request->request->get('_token'))) {
+            
+            // Supprime le véhicule de la base de données
+            $entityManagerInterface->remove($vehicule);
+            $entityManagerInterface->flush();
+             
+            // Ajout d'un message flash pour informer l'utilisateur de la réussite de la suppression
+            $this->addFlash('success', 'Véhicule supprimé avec succès !');
+        }else {
+            // Si le token CSRF n'est pas valide, on redirige vers la page des véhicules
+            $this->addFlash('danger', 'Token CSRF invalide. Suppression annulée.');
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
+        // Redirection vers la page des véhicules après la suppression
+        return $this->redirectToRoute('app_account');
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

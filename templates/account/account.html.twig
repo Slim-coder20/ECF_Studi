@@ -1,45 +1,111 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ecoride | Mon compte{% endblock %}
+{% block title %}Ecoride | Mon compte
+{% endblock %}
 
 {% block body %}
-<div class="container mt-4 ">
-    <h2 class="text-success text-center">🌱 Mon Profil 🌱</h2><br>
+	<div class="container mt-4 ">
+		<h2 class="text-success text-center">🌱 Mon Profil 🌱</h2><br>
 
-    <div class="row mt-4 ">
-        <div class="col-md-4 mb-3 ">
-            <div class="card p-3 shadow-sm text-center border border-success rounded">
-                <img src="{{ asset('uploads/photos/' ~ user.photo) }}" class="rounded-circle mb-2" width="100">
-                <h4 class="text-success "> {{ user.pseudo }}</h4>
-                <span class="badge bg-success">Actif</span><br>
-                <span class="badge bg-primary mt-3">{{ user.credits }} crédits</span><br>
-                <a href="#" class="btn btn-outline-success mt-3">Recharger mes crédits</a>
-                <a href="#" class="btn btn-outline-success mt-3">Proposer un trajet</a>
-            </div>
-        </div>
+		<div class="row mt-4 ">
+			<div class="col-md-4 mb-3 ">
+				<div class="card p-3 shadow-sm text-center border border-success rounded">
+					<img src="{{ asset('uploads/photos/' ~ user.photo) }}" class="rounded-circle mb-2" width="100">
+					<h4 class="text-success ">
+						{{ user.pseudo }}</h4>
+					<span class="badge bg-success">Actif</span><br>
+					<span class="badge bg-primary mt-3">{{ user.credits }}
+						crédits</span><br>
+					<a href="#" class="btn btn-outline-success mt-3">Recharger mes crédits</a>
+					<a href="#" class="btn btn-outline-success mt-3">Proposer un trajet</a>
+				</div>
+			</div>
 
-        <div class="col-md-8 mb-3">
-            <div class="card p-4 shadow-sm  border border-success rounded">
-                <h5 class="text-success">🌱 Informations personnelles</h5>
-                <p><strong class="text-success">🌱 Email :</strong> {{ user.email }}</p>
-                <p><strong class="text-success">🌱 Téléphone :</strong> Non renseigné</p>
+			<div class="col-md-8 mb-3">
+				<div class="card p-4 shadow-sm  border border-success rounded">
+					<h5 class="text-success">🌱 Informations personnelles</h5>
+					<p>
+						<strong class="text-success">🌱 Email :</strong>
+						{{ user.email }}</p>
+					<p>
+						<strong class="text-success">🌱 Téléphone :</strong>
+						Non renseigné</p>
 
-                <hr>
+					<hr>
 
-                <h5 class="text-success">Statistiques</h5>
-                <p >🚗 <span class="text-success">Trajets effectués : </span>0</p>
-                <p >🛣  <span class="text-success">Distance parcourue : </span>0 km</p>
-                <p >🌿 <span class="text-success">CO2 économisé :</span>  0 kg</p>
+					<h5 class="text-success">Statistiques</h5>
+					<p>🚗
+						<span class="text-success">Trajets effectués :
+						</span>0</p>
+					<p>🛣
+						<span class="text-success">Distance parcourue :
+						</span>0 km</p>
+					<p>🌿
+						<span class="text-success">CO2 économisé :</span>
+						0 kg</p>
 
-                <hr>
+					<hr>
 
-                <h5 class="text-success">Mode conducteur</h5>
-                <p>Activez le mode conducteur pour proposer des trajets et gagner des crédits.</p>
-                <a href="{{path('app_account_vehicules')}}" class="btn btn-outline-success">Devenir chauffeur</a>
-            </div>
-        </div>
-    </div>
-</div>
+					<h5 class="text-success">Mode conducteur</h5>
+					<p>Activez le mode conducteur pour proposer des trajets et gagner des crédits.</p>
+					<a href="{{path('app_account_vehicules')}}" class="btn btn-outline-success">Devenir chauffeur</a>
+					<h3 class="text-success mt-5">
+						🌱 Mes véhicules 🌱
+					</h3>
+
+					{% if vehicules is not empty %}
+						<div class="row">
+							{% for vehicule in vehicules %}
+								<div class="col-md-4 mb-4">
+									<div class="card shadow p-3 border border-success rounded">
+										<h5 class="text-success">{{ vehicule.marque }}
+											{{ vehicule.modele }}</h5>
+										<p>
+											<strong class="text-success">Immatriculation :</strong>
+											{{ vehicule.plaqueImmatriculation }}</p>
+										<p>
+											<strong class="text-success">Couleur :</strong>
+											{{ vehicule.couleur }}</p>
+										<p>
+											<strong class="text-success">Électrique :</strong>
+											{{ vehicule.isElectrique ? 'Oui' : 'Non' }}</p>
+										<p>
+											<strong class="text-success">Places :</strong>
+											{{ vehicule.nbPlaces }}</p>
+										<p>
+											<strong class="text-success">Fumeur :</strong>
+											{{ vehicule.accepteFumeur ? 'Oui' : 'Non' }}</p>
+										<p>
+											<strong class="text-success">Animaux :</strong>
+											{{ vehicule.accepteAnimaux ? 'Oui' : 'Non' }}</p>
+
+										{% if vehicule.photo %}
+											<img src="{{ asset('uploads/photos/' ~ vehicule.photo) }}" class="img-fluid rounded object-fit mt-2" style="max-height: 150px;">
+										{% endif %}
+										<!-- Bouton Modifier -->
+										<a href="{{ path('app_account_vehicules', { id: vehicule.id }) }}" class="btn btn-outline-success btn-sm mt-3">
+											✏️ Modifier
+										</a>
+										<!-- Bouton Supprimer -->
+										<form method="post" action="{{ path('app_account_vehicule_delete', {id: vehicule.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce véhicule ?');">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicule.id) }}">
+											<button class="btn btn-outline-danger btn-sm mt-3 w-100">🗑 Supprimer</button>
+										</form>
+
+
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					{% else %}
+						<p class="text-muted">Aucun véhicule enregistré pour l’instant.</p>
+					{% endif %}
+
+
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 {% endblock %}

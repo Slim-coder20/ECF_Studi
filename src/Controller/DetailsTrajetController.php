@@ -15,4 +15,16 @@ final class DetailsTrajetController extends AbstractController
             'trajet' => $trajet,
         ]);
     }
+
+
+
+
+
+
+
+
+
+
+
+
 }
