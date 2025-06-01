@@ -12,6 +12,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 
 
 class VehiculeTypeForm extends AbstractType
@@ -95,6 +97,30 @@ class VehiculeTypeForm extends AbstractType
                     'class' => 'text-success',
                 ],
             ])
+
+            ->add('photo', FileType::class, [
+                'label' => 'Photo de Véhicule',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif',
+                            'image/webp',
+                            'image/jpg',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG, GIF, WebP)',
+                    ]),
+                ],
+                'label_attr' => [
+                    'class' => 'text-success',
+                ],
+                'attr' => ['placeholder' => 'Entrez l\'URL de votre photo de Véhicule'],
+            ])
+            
             ->add('proprietaire', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'pseudo',

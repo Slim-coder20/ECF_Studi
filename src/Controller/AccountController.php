@@ -49,6 +49,18 @@ final class AccountController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $vehicule->setProprietaire($user);
+            
+            // traiter l'image si elle est présente
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+                $imageFile->move(
+                    $this->getParameter('photos_directory'),
+                    $newFilename
+                );
+                $vehicule->setPhoto($newFilename);
+            }
+            
             $entityManager->persist($vehicule);
             $entityManager->flush();
 
