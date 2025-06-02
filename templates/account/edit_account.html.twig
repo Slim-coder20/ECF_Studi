@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ecoride | Modifier Profile {% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-success text-center">🌱 Modifier mon profil 🌱</h1>
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-outline-success mt-3">Enregistrer les modifications</button>
+        <a href="{{ path('app_account') }}" class="btn btn-outline-success mt-3">Mon compte</a>
+        {{ form_end(form) }}
+
+    </div>
+  
+{% endblock %}
+

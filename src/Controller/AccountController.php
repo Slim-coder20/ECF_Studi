@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\VehiculeTypeForm;
+use App\Form\EditProfileTypeForm;
 
 final class AccountController extends AbstractController
 {   
@@ -34,6 +35,51 @@ final class AccountController extends AbstractController
              'vehicules' => $user->getVehicules(), 
         ]);
     }
+    
+    // cette route permet de modifier le profile de l'utillisateur depuis son compte // 
+    #[Route('/compte/modifier', name: 'app_account_edit')]
+    public function editAccount(Request $request, EntityManagerInterface $em): Response
+    {
+        // Vérifie que l'utilisateur est connecté//
+        $user = $this->getUser();
+        if (!$user) {
+            // Si l'utilisateur n'est pas connecté, on redirige vers la page de connexion
+            return $this->redirectToRoute('app_login');
+        }
+        // Crée un formulaire pour modifier les informations de l'utilisateur
+        $form = $this->createForm(EditProfileTypeForm::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Traite l'image si elle est présente
+            $imageFile = $form->get('photo')->getData();
+            if ($imageFile) {
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+                $imageFile->move(
+                    $this->getParameter('photos_directory'),
+                    $newFilename
+                );
+                $user->setPhoto($newFilename);
+            }
+            
+            // Enregistre les modifications dans la base de données
+            $em->persist($user);
+            $em->flush();
+
+            // Ajout d'un message flash pour informer l'utilisateur de la réussite de la modification
+            $this->addFlash('success', 'Profil modifié avec succès !');
+
+            // Redirection vers la page du compte après la modification
+            return $this->redirectToRoute('app_account');
+        }
+
+        // À compléter avec la logique de modification du profil utilisateur
+        // Pour l'instant, on retourne simplement la vue du profil à modifier
+        return $this->render('account/edit_account.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
+    }
+
     
     // cette route permet d'jouter un véhicule si l'utilsateur souhaite passer en mode conducteur // 
     
@@ -79,7 +125,7 @@ final class AccountController extends AbstractController
         ]);
     }
 
-
+    
     // cette route permet de modifier les informations concernat le véhicule créé par l'utilisateur // 
     #[Route('/compte/vehicule/modifier/{id}', name: 'app_account_vehicule_edit')]
     public function editVehicule(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManagerInterface): Response 
