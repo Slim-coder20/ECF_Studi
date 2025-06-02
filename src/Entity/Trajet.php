@@ -43,9 +43,16 @@ class Trajet
     #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'trajet')]
     private Collection $avis;
 
+    /**
+     * @var Collection<int, Participation>
+     */
+    #[ORM\OneToMany(targetEntity: Participation::class, mappedBy: 'trajet')]
+    private Collection $participations;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
+        $this->participations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -161,6 +168,36 @@ class Trajet
             // set the owning side to null (unless already changed)
             if ($avi->getTrajet() === $this) {
                 $avi->setTrajet(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Participation>
+     */
+    public function getParticipations(): Collection
+    {
+        return $this->participations;
+    }
+
+    public function addParticipation(Participation $participation): static
+    {
+        if (!$this->participations->contains($participation)) {
+            $this->participations->add($participation);
+            $participation->setTrajet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipation(Participation $participation): static
+    {
+        if ($this->participations->removeElement($participation)) {
+            // set the owning side to null (unless already changed)
+            if ($participation->getTrajet() === $this) {
+                $participation->setTrajet(null);
             }
         }
 
