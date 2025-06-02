@@ -9,7 +9,7 @@
     <div class="row">
         <!-- Carte 1 : Infos du trajet -->
         <div class="col-md-4 mb-4">
-            <div class="card shadow p-4">
+            <div class="card shadow p-4 border-success">
                 <h4 class="text-success"> 🌱 Trajet</h4>
                 <p><strong class="text-success">Départ :</strong> {{ trajet.villeDepart }}</p>
                 <p><strong class="text-success">Arrivée :</strong> {{ trajet.villeArrivee }}</p>
@@ -22,7 +22,7 @@
 
         <!-- Carte 2 : Infos chauffeur avec photo à gauche -->
         <div class="col-md-4 mb-4">
-            <div class="card shadow p-4">
+            <div class="card shadow p-4 border-success">
                 <h4 class="text-success"> 🌱 Chauffeur</h4>
 
                 <div class="d-flex align-items-center ">
@@ -45,14 +45,14 @@
         </div>
         <!-- Avis sur le conducteur --> 
       <div class="col-md-4 mb-4">
-    <div class="card shadow p-4">
+    <div class="card shadow p-4 border-success">
         <h4 class="text-success">🌱 Avis sur le conducteur</h4>
         {% if trajet.chauffeur.avis|length > 0 %}
             {% for avis in trajet.chauffeur.avis %}
                 <div class="border-bottom pb-2 mb-2">
                     <span class="badge bg-success">Note : {{ avis.note }} / 5</span>
                     {% if avis.commentaire %}
-                        <strong>Commentaire :</strong> {{ avis.commentaire }}<br>
+                        <strong class="text-success">Commentaire :</strong> {{ avis.commentaire }}<br>
                     {% endif %}
                     <small class="text-muted">Posté le {{ avis.date|date('d/m/Y') }}
                     par {{ avis.auteur.pseudo }}</small>
@@ -62,9 +62,34 @@
             <p>Aucun avis pour ce conducteur.</p>
         {% endif %}
     </div>
+    <!--  carte 4: Informatiion sur le vehicule --> 
+    <div class="col-md-12 mb-4">
+    <div class="card shadow p-4 mt-4 border-success">
+        <h4 class="text-success">🌱 Véhicule utilisé</h4>
+        {% set vehicule = trajet.chauffeur.vehicules|first %}
+        {% if vehicule %}
+            
+            <p><strong class="text-success">Modèle :</strong> {{ vehicule.modele }}</p>
+            <p><strong class="text-success">Marque :</strong> {{ vehicule.marque }}</p>
+            <p><strong class="text-success">Énergie :</strong> {{ vehicule.isElectrique ? 'Électrique' : 'Thermique' }}</p>
+            <p><strong class="text-success">Fumeur accepté :</strong> {{ vehicule.accepteFumeur ? 'Oui' : 'Non' }}</p>
+            <p><strong class="text-success">Animaux acceptés :</strong> {{ vehicule.accepteAnimaux ? 'Oui' : 'Non' }}</p>
+
+            {% if vehicule.photo %}
+                <img src="{{ asset('uploads/photos/' ~ vehicule.photo) }}" class="img-fluid rounded mt-2" style="max-height: 150px;">
+            {% endif %}
+        {% else %}
+            <p class="text-muted">Aucun véhicule enregistré pour ce chauffeur.</p>
+        {% endif %}
+    </div>
 </div>
 
-    <a href="{{ path('app_search') }}" class="btn btn-outline-success">Rechercher un Trajet</a>
-    <a href="{{ path('app_login') }}" class="btn btn-outline-success">Participer à un trajet</a>
+</div>
+<div>
+    <a href="{{ path('app_search') }}" class="btn btn-outline-success ">Rechercher un Trajet</a>
+   <a href="{{ path('app_login') }}" class="btn btn-outline-success">Participer à un trajet</a>
+</div>
+    
+ 
 </div>
 {% endblock %}
