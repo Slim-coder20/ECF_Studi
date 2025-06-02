@@ -87,7 +87,13 @@
 </div>
 <div>
     <a href="{{ path('app_search') }}" class="btn btn-outline-success ">Rechercher un Trajet</a>
-   <a href="{{ path('app_login') }}" class="btn btn-outline-success">Participer à un trajet</a>
+    
+    {% if app.user %}
+        <a href="{{ path('app_login') }}" class="btn btn-outline-success">Participer à un trajet</a>
+    {% else %}
+        <a href="{{ path('app_register') }}" class="btn btn-outline-success">Inscription</a>
+    {% endif %}
+
 </div>
     
  
