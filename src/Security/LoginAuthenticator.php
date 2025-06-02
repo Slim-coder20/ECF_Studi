@@ -43,7 +43,18 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
+    {   // on récupère la session de la requête de l'utilisateur avant la connxion // 
+        $session = $request->getSession();
+
+        // redirection persoanalisée après la connexion vers le trajet voulu // 
+        if ($session->has('intended_trajet')) {
+        $trajetId = $session->get('intended_trajet');
+        $session->remove('intended_trajet');
+        return new RedirectResponse($this->urlGenerator->generate('app_participer_trajet', [
+            'id' => $trajetId,
+        ]));
+    }
+        
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }

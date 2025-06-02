@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ecoride | Participation Trajet
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+        <h2 class="text-success text-center mt-5">🌱 Confirmation de participation au trajet 🌱</h2><br>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card shadow p-4 border-success">
+                    <h4 class="text-success">🌱 Détails du trajet</h4>
+                    <p><strong class="text-success">Départ :</strong> {{ trajet.villeDepart }}</p>
+                    <p><strong class="text-success">Arrivée :</strong> {{ trajet.villeArrivee }}</p>
+                    <p><strong class="text-success">Date de départ :</strong> {{ trajet.dateDepart|date('d/m/Y H:i') }}</p>
+                    <p><strong class="text-success">Date d’arrivée :</strong> {{ trajet.dateArrivee|date('d/m/Y H:i') }}</p>
+                    <p><strong class="text-success">Places restantes :</strong> {{ trajet.nbPlaces }}</p>
+                    <p><strong class="text-success">Prix :</strong> {{ trajet.prix }} €</p>
+                    <p><strong class="text-success">Vos crédits actuels :</strong> {{ user.credits }}</p>
+
+                    <h4 class="text-success mt-4">🌱 Confirmation</h4>
+                    <p>Êtes-vous sûr de vouloir participer à ce trajet ?</p>
+
+                    <form method="post" action="{{ path('app_participer_trajet', {'id': trajet.id}) }}">
+                        <input type="hidden" name="confirm" value="yes">
+                        <button type="submit" class="btn btn-success">Confirmer ma participation</button>
+                        <a href="{{ path('app_details_trajet', {'id': trajet.id}) }}" class="btn btn-outline-danger">Annuler</a>
+                    </form>
+                </div>
+            </div>
+        
+        </div>
+    
+    </div>
+
+
+{% endblock %}
