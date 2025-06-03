@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ecoride | Proposer un Trajet
+{% endblock %}
+
+{% block body %}
+
+	<div class="container mt-5 ">
+		<h1 class="text-success text-center ">🌱 Proposer un trajet 🌱</h1><br>
+		<div class="row ">
+			<div class="col-md-12 mb-3 ">
+				<div class="card shadow p-4 border-success">
+					{{ form_start(form) }}
+					{{ form_widget(form) }}
+					<button class="btn btn-outline-success mt-3 w-100">Valider</button>
+					<a href="{{ path('app_account') }}" class="btn btn-outline-success mt-3 w-100">Mon compte</a>
+					{{ form_end(form) }}
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+{% endblock %}

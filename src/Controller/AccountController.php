@@ -32,7 +32,7 @@ final class AccountController extends AbstractController
         
         return $this->render('account/account.html.twig', [
             'user' => $user,
-             'vehicules' => $user->getVehicules(), 
+            'vehicules' => $user->getVehicules(), 
         ]);
     }
     

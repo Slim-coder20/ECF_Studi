@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Form\TrajetTypeForm;
 
 final class DetailsTrajetController extends AbstractController
 {
@@ -85,8 +86,50 @@ final class DetailsTrajetController extends AbstractController
         ]);
     }
 
+    // Cette route permet de proposer un trajet depuis l'espace utilisateur //
+    #[Route('compte/trajet/ajouter', name: 'app_add_trajet')]
+    public function ajouterTrajet(Request $request, EntityManagerInterface $em ): Response 
+    
+    {
+      $user = $this->getUser(); 
+      // Sécurité : On vérifie que l'utilisateur est bien connecté // 
+      if(!$user){
+        return $this->redirectToRoute('app_login'); 
+    }
 
+    if($user->getVehicules()->isEmpty()){
+        $this->addFlash('warning', 'Voous devez enregistrer un véhicule dans votre espace avant de proposer un trajet .'); 
+        return $this->redirectToRoute('app_account_vehicules'); 
+    
+    
+    }
+    // On instancie un nouveau Trajet // 
 
+    $trajet = new Trajet(); 
+    $trajet->setChauffeur($user); 
+
+    // On créé le formulaire pour l'ajout de Trajet // 
+    $form = $this->createForm(TrajetTypeForm::class, $trajet);
+    $form->handleRequest($request); 
+
+    // On vérifie que le formulaire est soumis et qu'il est bien valide // 
+    if($form->isSubmitted() && $form->isValid()){
+    
+        $em->persist($trajet); 
+        $em->flush(); 
+        $this->addFlash('success','Votre trajet a été ajouté avec succés !'); 
+        return $this->redirectToRoute('app_account'); 
+    
+    
+    }
+    return $this->render('account/trajet_add.html.twig', [
+        'form' => $form->createView(),
+    ]);
+      
+    
+    
+    
+    }
 
 
 
