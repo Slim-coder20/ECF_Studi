@@ -61,8 +61,10 @@ class TrajetRepository extends ServiceEntityRepository
         }
 
         if ($search->dureeMax) {
-            $qb->andWhere('TIMESTAMPDIFF(MINUTE, t.dateDepart, t.dateArrivee) <= :duree')
-               ->setParameter('duree', $search->dureeMax);
+            $qb->andWhere('t.dateDepart >= :now')
+            ->andWhere('t.dateDeprt <= :dureeMax')
+            ->setParameter('now', new \DateTime())
+            ->setParameter('nextWeek', (new \DateTime())->modify('+7 days'));
         }
 
         return $qb->getQuery()->getResult();
