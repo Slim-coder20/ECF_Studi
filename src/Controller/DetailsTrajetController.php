@@ -114,6 +114,7 @@ final class DetailsTrajetController extends AbstractController
 
     // On vérifie que le formulaire est soumis et qu'il est bien valide // 
     if($form->isSubmitted() && $form->isValid()){
+
     
         $em->persist($trajet); 
         $em->flush(); 
