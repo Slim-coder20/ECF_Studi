@@ -46,7 +46,7 @@ class TrajetFixtures extends Fixture
             $chauffeur->setPseudo('GreenDriver');
             $chauffeur->setRoles(['ROLE_USER']);
             $chauffeur->setPhoto('default.jpg');
-            $chauffeur->setNote(4.0);
+            //$chauffeur->setNote(4.0);
 
             $manager->persist($chauffeur);
 
