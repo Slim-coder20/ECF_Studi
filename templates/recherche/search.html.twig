@@ -54,9 +54,9 @@
 					<p>Prix :
 						{{ trajet.prix }}
 						€</p>
-					{# {% if trajet.vehicule and trajet.vehicule.isElectrique %}
-					                    <p class="text-success">🌱 Voyage écologique</p>
-					                {% endif %} #}
+					{% if trajet.vehicule and trajet.vehicule.isElectrique %}
+					    <p class="text-success">🌱 Voyage écologique</p>
+					{% endif %}
 					<a href="{{ path('app_details_trajet', { id: trajet.id }) }}" class="btn btn-outline-success">Détail</a>
 				</div>
 			{% endfor %}

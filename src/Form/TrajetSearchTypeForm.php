@@ -29,6 +29,7 @@ class TrajetSearchTypeForm extends AbstractType
             ->add('ecoloOnly', CheckboxType::class, [
                 'label' => 'Trajets écologiques uniquement',
                 'required' => false,
+                
             ])
             ->add('prixMax', IntegerType::class, [
                 'label' => 'Prix maximum',
