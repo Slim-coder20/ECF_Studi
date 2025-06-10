@@ -63,8 +63,8 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if participation.statut == 'confirmée' and trajet.statut == 'planifié' or trajet.statut == 'complet'%}
-                                <form method="post" action="{{path('app_participation_annulee', {'id': participation.id})}}" onsubmit="return confirm ('Êtes-vous sûr de vouloir annuler cette participation ? Cette action est irréversible.');" >
+                            {% if participation.statut == 'confirmée' and (trajet.statut == 'planifié' or trajet.statut == 'complet')%}
+                                <form method="post" action="{{path('app_participation_annuler', {'id': participation.id})}}" onsubmit="return confirm ('Êtes-vous sûr de vouloir annuler cette participation ? Cette action est irréversible.');" >
                                 <input type="hidden" name="_token" value="{{ csrf_token('annuler_participation' ~ participation.id) }}">
                                 <button type="submit" class="btn btn-sm btn-warning">Annuler ma participation</button>
                             </form>
@@ -74,7 +74,7 @@
                              <span class="text-muted">--</span>
                             {% endif %}
                         </td>
-                    </tr>
+                       </tr>
                 {% endfor %}
             </tbody>
         </table>

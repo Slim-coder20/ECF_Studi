@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Trajet;
 use App\Entity\User;
+use App\Entity\Vehicule;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,7 +21,7 @@ class TrajetTypeForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('villeDepart', TextType::class, [
+        ->add('villeDepart', TextType::class, [
                 'label' => 'Ville de départ',
                 'attr' => ['placeholder' => 'Entrez la ville de départ'],
                 'label_attr' => [
@@ -29,14 +30,14 @@ class TrajetTypeForm extends AbstractType
             ])
            
 
-            ->add('villeArrivee', TextType::class, [
+        ->add('villeArrivee', TextType::class, [
                 'label' => 'Ville d\'arrivée',
                 'attr' => ['placeholder' => 'Entrez la ville d\'arrivée'],
                 'label_attr' => [
                     'class' => 'text-success',
                 ],
             ])
-            ->add('dateDepart',DateType::class, [
+        ->add('dateDepart',DateType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date de départ',
                 'input' => 'datetime',
@@ -45,7 +46,7 @@ class TrajetTypeForm extends AbstractType
                 ],
                 'attr' => ['placeholder' => 'Sélectionnez la date de départ'],
             ])
-            ->add('dateArrivee', DateType::class, [
+        ->add('dateArrivee', DateType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date d\'arrivée',
                 'input' => 'datetime',
@@ -54,14 +55,14 @@ class TrajetTypeForm extends AbstractType
                 ],
                 
             ])
-            ->add('nbPlaces',IntegerType::class, [
+        ->add('nbPlaces',IntegerType::class, [
                 'label' => 'Nombre de places',
                 'attr' => ['placeholder' => 'Entrez le nombre de places disponibles'],
                 'label_attr' => [
                     'class' => 'text-success',
                 ],
             ])
-            ->add('prix', IntegerType::class, [
+        ->add('prix', IntegerType::class, [
             'label' => 'Prix',
             'label_attr' => [
             'class' => 'text-success',
@@ -70,10 +71,28 @@ class TrajetTypeForm extends AbstractType
             new GreaterThanOrEqual([
             'value' => 2,
             'message' => 'Le prix doit être au minimum de 2 crédits.',
+        
         ]),
+       
+
+            
     ],
 ])
-           
+        ->add('vehicule', EntityType::class, [
+        'class' => Vehicule::class,
+        'choice_label' => function (Vehicule $vehicule) {
+            return $vehicule->getMarque() . ' ' . $vehicule->getModele();
+        },
+        'label' => 'Véhicule',
+        'label_attr' => [
+            'class' => 'text-success',
+        ],
+        'placeholder' => 'Sélectionnez un véhicule',
+        'attr' => ['class' => 'form-select'],
+        
+        
+        
+        ])       
         ;
     }
 

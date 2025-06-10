@@ -54,7 +54,7 @@ class Trajet
     private ?Vehicule $vehicule = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $statut = 'planifier';
+    private ?string $statut = 'planifié';
 
     public function __construct()
     {

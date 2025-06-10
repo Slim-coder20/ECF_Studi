@@ -182,6 +182,7 @@ final class DetailsTrajetController extends AbstractController
 
     $trajet = new Trajet(); 
     $trajet->setChauffeur($user); 
+    $trajet->setStatut('planifié');
 
     // On créé le formulaire pour l'ajout de Trajet // 
     $form = $this->createForm(TrajetTypeForm::class, $trajet);
