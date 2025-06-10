@@ -49,6 +49,10 @@ class Trajet
     #[ORM\OneToMany(targetEntity: Participation::class, mappedBy: 'trajet')]
     private Collection $participations;
 
+    #[ORM\ManyToOne(inversedBy: 'trajets')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Vehicule $vehicule = null;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -200,6 +204,18 @@ class Trajet
                 $participation->setTrajet(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVehicule(): ?Vehicule
+    {
+        return $this->vehicule;
+    }
+
+    public function setVehicule(?Vehicule $vehicule): static
+    {
+        $this->vehicule = $vehicule;
 
         return $this;
     }

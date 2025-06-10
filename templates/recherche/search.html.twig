@@ -10,7 +10,7 @@
 		{{ form_start(form) }}<br>
 		<div class="row my-1">
 			<div class="col-md-4 text-success">
-                {{ form_row(form.villeDepart) }}
+				{{ form_row(form.villeDepart) }}
 
 			</div>
 			<div class="col-md-4 text-success">
@@ -55,8 +55,8 @@
 						{{ trajet.prix }}
 						€</p>
 					{# {% if trajet.vehicule and trajet.vehicule.isElectrique %}
-					                    <p class="text-success">🌱 Voyage écologique</p>
-					                {% endif %} #}
+						<p class="text-success">🌱 Voyage écologique</p>
+					{% endif %} #}
 					<a href="{{ path('app_details_trajet', { id: trajet.id }) }}" class="btn btn-outline-success">Détail</a>
 				</div>
 			{% endfor %}
