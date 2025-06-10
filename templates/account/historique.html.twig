@@ -1,0 +1,79 @@
+{# filepath: templates/account/mes_participations.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Ecoride |Mes Participations{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="text-success"> 🌱 Mes Participations aux Covoiturages 🌱</h1>
+
+    {% if participations is not empty %}
+        <table class="table table-striped mt-3 ">
+            <thead>
+                <tr>
+                    <th class="text-success ">Trajet</th>
+                    <th class="text-success ">Départ</th>
+                    <th class="text-success ">Arrivée</th>
+                    <th class="text-success ">Date de Départ</th>
+                    <th class="text-success ">Chauffeur</th>
+                    <th class="text-success ">Prix Payé</th>
+                    <th class="text-success ">Statut Participation</th>
+                    <th class="text-success ">Statut Trajet</th>
+                    <th class="text-success ">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for participation in participations %}
+                    {% set trajet = participation.trajet %}
+                    <tr>
+                        <td>
+                            {# Adaptez 'app_trajet_show' à votre route d'affichage d'un trajet si elle existe #}
+                            <a href="{{ path('app_details_trajet', {'id': trajet.id}) }}">{{ trajet.villeDepart }} - {{ trajet.villeArrivee }}</a>
+                        </td>
+                        <td>{{ trajet.villeDepart }}</td>
+                        <td>{{ trajet.villeArrivee }}</td>
+                        <td>{{ trajet.dateDepart ? trajet.dateDepart|date('d/m/Y H:i') : '' }}</td>
+                        <td>{{ trajet.chauffeur ? trajet.chauffeur.pseudo : 'N/A' }}</td>
+                        <td>{{ participation.prixPaye }} crédits</td>
+                        <td>
+                            {% if participation.statut == 'confirmée' %}
+                                <span class="badge bg-success">Confirmée</span>
+                            {% elseif participation.statut == 'annulee_par_passager' %}
+                                <span class="badge bg-warning text-dark">Annulée par vous</span>
+                            {% elseif participation.statut == 'trajet_annule' %}
+                                <span class="badge bg-danger">Trajet Annulé</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ participation.statut|default('N/D')|capitalize }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if trajet.statut == 'planifié' %}
+                                <span class="badge bg-info text-dark">Planifié</span>
+                            {% elseif trajet.statut == 'complet' %}
+                                <span class="badge bg-primary">Complet</span>
+                            {% elseif trajet.statut == 'annulé_par_chauffeur' %}
+                                <span class="badge bg-danger">Annulé par chauffeur</span>
+                            {% elseif trajet.statut == 'terminé' %}
+                                <span class="badge bg-secondary">Terminé</span>
+                            {% else %}
+                                <span class="badge bg-light text-dark">{{ trajet.statut|default('N/D')|capitalize }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if participation.statut == 'confirmée' and trajet.statut == 'planifié' %}
+                                {# Adaptez 'app_participation_annuler' à la future route d'annulation #}
+                                {# <a href="{{ path('app_participation_annuler', {'id': participation.id}) }}" class="btn btn-sm btn-warning">Annuler</a> #}
+                                <button class="btn btn-sm btn-warning" disabled>Annuler (bientôt)</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="mt-3">Vous n'avez participé à aucun covoiturage pour le moment.</p>
+    {% endif %}
+
+    <a href="{{ path('app_account') }}" class="btn btn-outline-success mt-3">Retour à mon compte</a>
+</div>
+{% endblock %}

@@ -11,8 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\VehiculeTypeForm;
 use App\Form\EditProfileTypeForm;
+use App\Repository\ParticipationRepository;
 
-final class AccountController extends AbstractController
+ class AccountController extends AbstractController
 {   
     // cette route permet d'afficher le compte de l'utilisateur connecté // 
     // elle est accessible via l'URL /compte et utilise le template account.html.twig //
@@ -194,7 +195,25 @@ final class AccountController extends AbstractController
         // Redirection vers la page des véhicules après la suppression
         return $this->redirectToRoute('app_account');
     }
-    
+   
+    // cette méthode va nous permettre d'afficher l'historique des trajets de l'utilisateur connecté en tant que passager // 
+    #[Route('/compte/historique', name: 'app_account_historique')]  
+    public function historique(ParticipationRepository $participationRepository): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            // Si l'utilisateur n'est pas connecté, on redirige vers la page de connexion
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Récupère les participations de l'utilisateur connecté
+        $participations = $participationRepository->findBy(['passager' => $user]);
+
+        return $this->render('account/historique.html.twig', [
+            'participations' => $participations,
+            'user' => $user,
+        ]);
+    }
     
     
     
