@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+{% block title %}Ecoride |Mes trajets conducteur
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h1 class="text-success ">
+			🌱 Mes Trajets conducteur 🌱</h1>
+
+		{% if Trajets_conduits is not empty %}
+			<table class="table table-striped mt-3 ">
+				<thead>
+					<tr>
+						<th class="text-success ">Trajet</th>
+						<th class="text-success ">Départ</th>
+						<th class="text-success ">Arrivée</th>
+						<th class="text-success ">Date de Départ</th>
+						<th class="text-success ">Date d'arrivée</th>
+						<th class="text-success ">Nombre de places</th>
+						<th class="text-success ">Prix</th>
+						<th class="text-success ">Statut Trajet</th>
+						<th class="text-success ">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for trajet in Trajets_conduits %}
+						<tr>
+							<td>
+								<a href="{{ path('app_details_trajet', {'id': trajet.id}) }}" class="text-decoration-none text-success">{{ trajet.villeDepart }}
+									-
+									{{ trajet.villeArrivee }}</a>
+							</td>
+							<td>{{trajet.villeDepart}}</td>
+							<td>{{trajet.villeArrivee}}</td>
+							<td>{{ trajet.dateDepart ? trajet.dateDepart|date('d/m/Y ') : 'N/A' }}</td>
+							<td>{{ trajet.dateArrivee ? trajet.dateDepart|date('d/m/Y ') : 'N/A' }}</td>
+							<td>{{trajet.nbPlaces}}</td>
+							<td>{{trajet.prix}}
+								€</td>
+							<td>
+								{% if trajet.statut == 'planifier' %}
+									<span class="badge bg-info text-primary">Planifié</span>
+								{% elseif trajet.statut == 'complet' %}
+									<span class="badge bg-primary">Complet</span>
+								{% elseif  trajet.statut == 'annulé_par_chauffeur'%}
+									<span class="badge bg-danger">Annulé par vous</span>
+								{% elseif trajet.statut == 'terminer' %}
+									<span class="badge bg-success">Terminé</span>
+								{% else %}
+									<span class="badge bg-light text-dark">{{ trajet.statut|default('N/D')|capitalize }}</span>
+
+								{% endif %}
+
+							</td>
+                              <td>
+                            {# Bouton pour annuler le trajet (sera implémenté plus tard) #}
+                            {% if trajet.statut == 'planifié' %}
+                                {# Adaptez 'app_trajet_annuler_chauffeur' à votre future route d'annulation #}
+                                {# <a href="{{ path('app_trajet_annuler_chauffeur', {'id': trajet.id}) }}" class="btn btn-sm btn-danger">Annuler</a> #}
+                                <button class="btn btn-sm btn-danger" disabled>Annuler (bientôt)</button>
+                            {% elseif trajet.statut == 'annulé_par_chauffeur' %}
+                                <span class="text-muted">Déjà annulé</span>
+                            {% endif %}
+                            {# Vous pourriez ajouter d'autres actions : Modifier, Voir les participants... #}
+                        </td>
+                           
+
+
+						</tr>
+
+					{% endfor %}
+
+				</tbody>
+			</table>
+		{% else %}
+			<p class="mt-3">Vous n'avez participé à aucun covoiturage pour le moment.</p>
+		{% endif %}
+
+		<a href="{{ path('app_account') }}" class="btn btn-outline-success mt-3">Retour à mon compte</a>
+	</div>
+{% endblock %}

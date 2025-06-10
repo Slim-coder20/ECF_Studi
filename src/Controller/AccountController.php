@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Vehicule;
-use Dom\Entity;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Form\VehiculeTypeForm;
 use App\Form\EditProfileTypeForm;
 use App\Repository\ParticipationRepository;
+use App\Repository\TrajetRepository;
 
  class AccountController extends AbstractController
 {   
@@ -209,8 +210,28 @@ use App\Repository\ParticipationRepository;
         // Récupère les participations de l'utilisateur connecté
         $participations = $participationRepository->findBy(['passager' => $user]);
 
-        return $this->render('account/historique.html.twig', [
+        return $this->render('account/historique_passager.html.twig', [
             'participations' => $participations,
+            'user' => $user,
+        ]);
+    }
+    
+    // Cette route va nous permettre d'afficher l'historique des trajets de l'utilisateur en tant que conducteur // 
+    #[Route('/compte/historique/chauffeur', name: 'app_account_historique_chauffeur')]
+    #[IsGranted('ROLE_USER')] 
+    public function historiqueChauffeur( TrajetRepository $trajetRepository): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            // Si l'utilisateur n'est pas connecté, on redirige vers la page de connexion
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Récupère les participations de l'utilisateur connecté
+        $trajetsConduits = $trajetRepository->findBy(['chauffeur' => $user]);
+
+        return $this->render('account/historique_chauffeur.html.twig', [
+            'Trajets_conduits' => $trajetsConduits,
             'user' => $user,
         ]);
     }
