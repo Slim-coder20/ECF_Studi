@@ -28,14 +28,16 @@
                     <tr>
                         <td>
                             {# Adaptez 'app_trajet_show' à votre route d'affichage d'un trajet si elle existe #}
-                            <a href="{{ path('app_details_trajet', {'id': trajet.id}) }}">{{ trajet.villeDepart }} - {{ trajet.villeArrivee }}</a>
+                            <a href="{{ path('app_details_trajet', {'id': trajet.id}) }}" class="text-decoration-none text-success">{{ trajet.villeDepart }} - {{ trajet.villeArrivee }}</a>
                         </td>
                         <td>{{ trajet.villeDepart }}</td>
                         <td>{{ trajet.villeArrivee }}</td>
-                        <td>{{ trajet.dateDepart ? trajet.dateDepart|date('d/m/Y H:i') : '' }}</td>
+                        <td>{{ trajet.dateDepart ? trajet.dateDepart|date('d/m/Y ') : '' }}</td>
+                        
                         <td>{{ trajet.chauffeur ? trajet.chauffeur.pseudo : 'N/A' }}</td>
                         <td>{{ participation.prixPaye }} crédits</td>
                         <td>
+                            {# Statut de participation #}
                             {% if participation.statut == 'confirmée' %}
                                 <span class="badge bg-success">Confirmée</span>
                             {% elseif participation.statut == 'annulee_par_passager' %}
@@ -47,11 +49,12 @@
                             {% endif %}
                         </td>
                         <td>
+                            {# statut du trajet #}
                             {% if trajet.statut == 'planifié' %}
                                 <span class="badge bg-info text-dark">Planifié</span>
                             {% elseif trajet.statut == 'complet' %}
                                 <span class="badge bg-primary">Complet</span>
-                            {% elseif trajet.statut == 'annulé_par_chauffeur' %}
+                            {% elseif trajet.statut == 'annulee_par_passager' %}
                                 <span class="badge bg-danger">Annulé par chauffeur</span>
                             {% elseif trajet.statut == 'terminé' %}
                                 <span class="badge bg-secondary">Terminé</span>
@@ -60,10 +63,15 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if participation.statut == 'confirmée' and trajet.statut == 'planifié' %}
-                                {# Adaptez 'app_participation_annuler' à la future route d'annulation #}
-                                {# <a href="{{ path('app_participation_annuler', {'id': participation.id}) }}" class="btn btn-sm btn-warning">Annuler</a> #}
-                                <button class="btn btn-sm btn-warning" disabled>Annuler (bientôt)</button>
+                            {% if participation.statut == 'confirmée' and trajet.statut == 'planifié' or trajet.statut == 'complet'%}
+                                <form method="post" action="{{path('app_participation_annulee', {'id': participation.id})}}" onsubmit="return confirm ('Êtes-vous sûr de vouloir annuler cette participation ? Cette action est irréversible.');" >
+                                <input type="hidden" name="_token" value="{{ csrf_token('annuler_participation' ~ participation.id) }}">
+                                <button type="submit" class="btn btn-sm btn-warning">Annuler ma participation</button>
+                            </form>
+                            {% elseif participation.statut == 'annulee_par_chauffeur' or trajet.statut == 'terminé' %}
+                            <span class="text-muted">Trajet {{trajet.statut|replace({'annulé_par_chauffeur': 'annulé', 'terminé': 'terminé'}) }}</span>
+                            {% else %}
+                             <span class="text-muted">--</span>
                             {% endif %}
                         </td>
                     </tr>

@@ -25,7 +25,7 @@ use App\Repository\TrajetRepository;
     #[Route('/compte', name: 'app_account')]
     public function index(): Response
 
-    {
+    {   /** @var \App\Entity\User|null $user */ 
         $user = $this->getUser();
         if (!$user) {
             // Si l'utilisateur n'est pas connecté, on redirige vers la page de connexion
@@ -43,6 +43,7 @@ use App\Repository\TrajetRepository;
     public function editAccount(Request $request, EntityManagerInterface $em): Response
     {
         // Vérifie que l'utilisateur est connecté//
+        /** @var \App\Entity\User|null $user */ 
         $user = $this->getUser();
         if (!$user) {
             // Si l'utilisateur n'est pas connecté, on redirige vers la page de connexion
@@ -175,6 +176,7 @@ use App\Repository\TrajetRepository;
     public function deleteVehicule(Vehicule $vehicule, EntityManagerInterface $entityManagerInterface, Request $request): Response
     {
         // Vérifie que l'utilisateur est bien le propriétaire du véhicule
+      
         if (!$vehicule->getProprietaire() || $vehicule->getProprietaire()->getId() !== $this->getUser()->getId()) {
         throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer ce véhicule.');
        }

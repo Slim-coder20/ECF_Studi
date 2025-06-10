@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+ use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 use App\Form\TrajetTypeForm;
 
 final class DetailsTrajetController extends AbstractController
@@ -23,8 +25,9 @@ final class DetailsTrajetController extends AbstractController
     // Cette route va nous permettre de participer à un trajet via la page détails du trajet//  
     #[Route('/trajet/{id}/participer', name: 'app_participer_trajet')]
     public function participer(Trajet $trajet, Request $request, EntityManagerInterface $em): Response
-    {
-        
+    {   
+         /** @var \App\Entity\User|null $user */ 
+         $user = $this->getUser(); 
         // On stocke l'intention de participer avant connexion // 
         if(!$this->getUser()) {
             $session = $request->getSession();
@@ -32,14 +35,24 @@ final class DetailsTrajetController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         
-        
-        $user = $this->getUser(); 
-        // On vérifie que l'utilisateur est connecté avant de lui permettre de participer à un trajet // 
-       if(!$user) {
-            $this->addFlash('error', 'Vous devez être connecté pour participer à un trajet.');
+        // On vérifie si l'utilisateur est le chauffeur du trajet //
+        if($trajet->getChauffeur() == $user){
+            $this->addFlash('error', 'Vous ne pouvez pas participer à votre propre trajet en tant que passager.');
             return $this->redirectToRoute('app_login');
         }
-        // vérfier si il reste des places disponible // 
+        
+        // on vérife si l'utilisateur participe )déjà // 
+
+        foreach($trajet->getParticipations() as $existingParticipation){
+         if($existingParticipation->getPassager() === $user){
+            $this->addFlash('info', 'Vous participez déjà à ce trajet.');
+            return $this->redirectToRoute('app_details_trajet', ['id' => $trajet->getId()]);
+        }
+        
+        }
+    
+    
+    // vérfier si il reste des places disponible // 
         if ($trajet->getNbPlaces() <= 0) {
             $this->addFlash('error', 'Il n\'y a plus de places disponibles pour ce trajet.');
             return $this->redirectToRoute('app_details_trajet', ['id' => $trajet->getId()]);
@@ -64,18 +77,21 @@ final class DetailsTrajetController extends AbstractController
             // on associe la date de participation à la participation //
             $participation->setPrixPaye($trajet->getPrix());
             // on associe le prix payé à la participation //    
+            $participation->setStatut('confirmée'); 
+            // on défini le statut 
             $em->persist($participation);
+
             
             $user->setCredits($user->getCredits() - $trajet->getPrix());
             // on retire le prix du trajet des crédits de l'utilisateur //
+            
             $trajet->setNbPlaces($trajet->getNbPlaces() - 1);
             // on retire une place du trajet //
 
-            $em->persist($participation);
             $em->flush();
 
         $this->addFlash('success', 'Votre participation est confirmée !');
-        return $this->redirectToRoute('app_account');
+        return $this->redirectToRoute('app_account_historique');
         
         }
         
@@ -86,11 +102,70 @@ final class DetailsTrajetController extends AbstractController
         ]);
     }
 
-    // Cette route permet de proposer un trajet depuis l'espace utilisateur //
+    // cette méthode nous permettra d'annuler la participation à un Trajet // 
+     #[Route('/participation/{id}/annuler', name: 'app_participation_annuler', methods: ['POST'])]
+     #[IsGranted('ROLE_USER')]
+     public function annulerParticipation(Request $request, Participation $participation, EntityManagerInterface $em): Response
+     {   
+        // Récupaération de l'utilisateur connecté //
+         /** @var \App\Entity\User $user */
+         $user = $this->getUser();
+
+        //On vérifie les droits d'annulation du trajet //
+        if($participation->getPassager() !== $user){
+            $this->addFlash('error', "Vous n'êtes pas autoriser à annuler cette participation."); 
+            return $this->redirectToRoute('app_account_historique'); 
+        }
+        // Mise en place du token CSRF pour la sécurité de la requete envoyé pour l'annulation de participation // 
+        $token = $request->request->get('_token');
+        // On récupère le token sounis deouis le formulaire dans le template historique_passager.html.twig // 
+        if(!$this->isCsrfTokenValid('annuler_participation'.$participation->getId(),$token)){
+            // Le nom du token 'annuler_participation' . $participation->getId() doit correspondre
+            // à celui généré dans le template Twig.
+            $this->addFlash('error', "Vous n'êtes pas autorisé à annuler cette participation.");
+            return $this->redirectToRoute('app_account_historique'); 
+        
+        }
+        // Récupération du trajet associé à la participation 
+        $trajet = $participation->getTrajet();
+         
+        // les conditions d'annulation de participation // 
+        // On vérifie si la participation est 'confirmé'et si le trajet est planifié ou coplet // 
+
+        if($participation->getStatut() === 'confirmée' && $trajet->getStatut() === 'planifié' || $trajet->getStatut() === 'complet'){
+            
+            // Action si l'annulation est permise // 
+            // mettre a jour le statut de la participation // 
+            $participation->setStatut('annulee_par_passager');
+
+            // recréditer l'utilisateur des prix payé pour la participation // 
+            $user ->setCredits($user->getCredits() + $participation->getPrixPaye());
+
+            //Augmenter le nombre de place disponible pour la participation // 
+            $trajet->setNbPlaces($trajet->getNbPlaces() + 1);
+            
+            // Si le trajet était 'complet', il reevient 'planifier' car une place s'est liberé // 
+             if ($trajet->getStatut() === 'complet') {
+                $trajet->setStatut('planifié');
+            }
+            // sauvegarde tous les changements en base de donnée // 
+            $em->flush();
+            $this->addFlash('success', 'Votre participation a bien été annulée.');
+        }else{
+        
+         $this->addFlash('warning', 'Cette participation ne peut plus être annulée (vérifiez le statut de la participation ou du trajet).');
+        
+        }
+         
+        return $this->redirectToRoute('app_account_historique');
+    }
+
+
+// Cette route permet de proposer un trajet depuis l'espace utilisateur //
     #[Route('compte/trajet/ajouter', name: 'app_add_trajet')]
     public function ajouterTrajet(Request $request, EntityManagerInterface $em ): Response 
     
-    {
+    {  /** @var \App\Entity\User|null $user */ 
       $user = $this->getUser(); 
       // Sécurité : On vérifie que l'utilisateur est bien connecté // 
       if(!$user){
