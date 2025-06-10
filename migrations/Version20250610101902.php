@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250610081115 extends AbstractMigration
+final class Version20250610101902 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -19,11 +19,16 @@ final class Version20250610081115 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        //$this->addSql('ALTER TABLE trajet ADD vehicule_id INT DEFAULT NULL');
-        $this->addSql('UPDATE trajet SET vehicule_id = 6'); // ✅ ID existant
-        $this->addSql('ALTER TABLE trajet MODIFY vehicule_id INT NOT NULL');
-        $this->addSql('ALTER TABLE trajet ADD CONSTRAINT FK_2B5BA98C4A4A3511 FOREIGN KEY (vehicule_id) REFERENCES vehicule (id)');
-        $this->addSql('CREATE INDEX IDX_2B5BA98C4A4A3511 ON trajet (vehicule_id)');
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql(<<<'SQL'
+            ALTER TABLE trajet ADD statut VARCHAR(255) NOT NULL
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE trajet ADD CONSTRAINT FK_2B5BA98C4A4A3511 FOREIGN KEY (vehicule_id) REFERENCES vehicule (id)
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE INDEX IDX_2B5BA98C4A4A3511 ON trajet (vehicule_id)
+        SQL);
     }
 
     public function down(Schema $schema): void
@@ -36,7 +41,7 @@ final class Version20250610081115 extends AbstractMigration
             DROP INDEX IDX_2B5BA98C4A4A3511 ON trajet
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE trajet DROP vehicule_id
+            ALTER TABLE trajet DROP statut
         SQL);
     }
 }

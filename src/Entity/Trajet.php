@@ -53,6 +53,9 @@ class Trajet
     #[ORM\JoinColumn(nullable: false)]
     private ?Vehicule $vehicule = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $statut = 'planifier';
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
@@ -216,6 +219,18 @@ class Trajet
     public function setVehicule(?Vehicule $vehicule): static
     {
         $this->vehicule = $vehicule;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): static
+    {
+        $this->statut = $statut;
 
         return $this;
     }
