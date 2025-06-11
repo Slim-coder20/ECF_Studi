@@ -57,7 +57,7 @@
                             {% if trajet.statut == 'planifié' %}
                                 {# Adaptez 'app_trajet_annuler_chauffeur' à votre future route d'annulation #}
                                 {# <a href="{{ path('app_trajet_annuler_chauffeur', {'id': trajet.id}) }}" class="btn btn-sm btn-danger">Annuler</a> #}
-                                <button class="btn btn-sm btn-danger" disabled>Annuler (bientôt)</button>
+                                <button class="btn btn-sm btn-danger" >Annuler</button>
                             {% elseif trajet.statut == 'annulé_par_chauffeur' %}
                                 <span class="text-muted">Déjà annulé</span>
                             {% endif %}
