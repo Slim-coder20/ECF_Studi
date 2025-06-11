@@ -8,7 +8,7 @@
 			🌱 Mes Trajets conducteur 🌱</h1>
 
 		{% if Trajets_conduits is not empty %}
-			<table class="table table-striped mt-3 ">
+			<table class="table table-striped mt-3 border-success">
 				<thead>
 					<tr>
 						<th class="text-success ">Trajet</th>
@@ -61,11 +61,11 @@
 										{# je créé un systeme de formulaire pour gérer démarrer un trajet ce qui me permeettra d'introduire le csrf_token pour la sécurité  #}
 										{# Formulaire pour démarer le Trajet  #}
 											<form method="post" action="{{ path('app_trajet_demarrer', {'id': trajet.id}) }}"> <input type="hidden" name="_token" value="{{ csrf_token('demarrer_trajet' ~ trajet.id) }}">
-											<button type="submit" class="btn btn-sm-success">Démarer</button>
+											<button type="submit" class="btn btn-success">Démarer</button>
 										</form>
 										{# Formulaire pour annuler le Trajet #}
-											<form method="post" action="{{ path('app_trajet_annuler', {'id': trajet.id}) }}"> <input type="hidden" name="_token" value="{{ csrf_token('annuler_trajet_chauffeur' ~ trajet.id) }}">
-											<button type="submit" class="btn btn-sm-success">Annuler</button>
+											<form method="post" action="{{ path('app_trajet_annuler_chauffeur', {'id': trajet.id}) }}"> <input type="hidden" name="_token" value="{{ csrf_token('annuler_trajet_chauffeur' ~ trajet.id) }}">
+											<button type="submit" class="btn btn-danger "> Annuler</button>
 										</form>
 
 									</div>
