@@ -38,13 +38,15 @@
 							<td>{{trajet.prix}}
 								€</td>
 							<td>
-								{% if trajet.statut == 'planifier' %}
+								{% if trajet.statut == 'planifié' %}
 									<span class="badge bg-info text-primary">Planifié</span>
 								{% elseif trajet.statut == 'complet' %}
 									<span class="badge bg-primary">Complet</span>
+								{% elseif trajet.statut == 'en_cours'%}
+									<span class="badge bg-secondary"></span>
 								{% elseif  trajet.statut == 'annulé_par_chauffeur'%}
 									<span class="badge bg-danger">Annulé par vous</span>
-								{% elseif trajet.statut == 'terminer' %}
+								{% elseif trajet.statut == 'terminé' %}
 									<span class="badge bg-success">Terminé</span>
 								{% else %}
 									<span class="badge bg-light text-dark">{{ trajet.statut|default('N/D')|capitalize }}</span>
@@ -52,18 +54,34 @@
 								{% endif %}
 
 							</td>
-                              <td>
-                            {# Bouton pour annuler le trajet (sera implémenté plus tard) #}
-                            {% if trajet.statut == 'planifié' %}
-                                {# Adaptez 'app_trajet_annuler_chauffeur' à votre future route d'annulation #}
-                                {# <a href="{{ path('app_trajet_annuler_chauffeur', {'id': trajet.id}) }}" class="btn btn-sm btn-danger">Annuler</a> #}
-                                <button class="btn btn-sm btn-danger" >Annuler</button>
-                            {% elseif trajet.statut == 'annulé_par_chauffeur' %}
-                                <span class="text-muted">Déjà annulé</span>
-                            {% endif %}
-                            {# Vous pourriez ajouter d'autres actions : Modifier, Voir les participants... #}
-                        </td>
-                           
+							<td>
+								{# Action pour le chauffeur  #}
+								{% if trajet.statut == 'planifié' or trajet.statut == 'complet'%}
+									<div class="btn-group" role="group" aria-label="Actions chauffeur">
+										{# je créé un systeme de formulaire pour gérer démarrer un trajet ce qui me permeettra d'introduire le csrf_token pour la sécurité  #}
+										{# Formulaire pour démarer le Trajet  #}
+											<form method="post" action="{{ path('app_trajet_demarrer', {'id': trajet.id}) }}"> <input type="hidden" name="_token" value="{{ csrf_token('demarrer_trajet' ~ trajet.id) }}">
+											<button type="submit" class="btn btn-sm-success">Démarer</button>
+										</form>
+										{# Formulaire pour annuler le Trajet #}
+											<form method="post" action="{{ path('app_trajet_annuler', {'id': trajet.id}) }}"> <input type="hidden" name="_token" value="{{ csrf_token('annuler_trajet_chauffeur' ~ trajet.id) }}">
+											<button type="submit" class="btn btn-sm-success">Annuler</button>
+										</form>
+
+									</div>
+									{% elseif trajet.statut == 'en_cours '%} 
+									{# Formulaire arrivé a destination  #}
+										<form method="post" action="{{ path('app_trajet_terminer_chauffeur', {'id': trajet.id}) }}"> <input type="hidden" name="_token" value="{{ csrf_token('terminer_trajet_chauffeur' ~ trajet.id) }}">
+											<button type="submit" class="btn btn-sm-success">Arrivé(e) à destination</button>
+										</form>
+									{% elseif  trajet.statut == 'annulé_par_chauffeur'%}
+									<span class="text-muted">Déjà annulé</span>
+									{% elseif  trajet.statut == 'terminé'%}
+									<span class="text-muted">Trajet terminé</span>
+									{% else %}
+									<span class="text-muted">--</span>
+									{% endif %}
+							</td>
 
 
 						</tr>
