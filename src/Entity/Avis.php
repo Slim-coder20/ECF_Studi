@@ -35,7 +35,7 @@ class Avis
     private ?Trajet $trajet = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $statut = null;
+    private ?string $statut = 'en_attente_de _validation';
 
     public function getId(): ?int
     {
