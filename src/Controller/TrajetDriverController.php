@@ -169,7 +169,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
                             $context
                             
                          );
-                         $this->addFlash('info', 'Un email de validation a été envoyé à'.$passager->getEmail());
+                         $this->addFlash('info', 'Un email de validation a été envoyé à '.$passager->getEmail());
                     
                     
                     
