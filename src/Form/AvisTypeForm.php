@@ -47,28 +47,8 @@ class AvisTypeForm extends AbstractType
                     'rows' => 4,
                 ],
             ])
-            ->add('date', DateTimeType::class, [
-                'label' => 'Date de l\'avis',
-                'widget' => 'single_text',
-                'input' => 'datetime_immutable',
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'Sélectionnez une date',
-                ],
-            ])
-            ->add('statut', ChoiceType::class, [
-                'label' => 'Statut',
-                'choices' => [
-                    'En attente de validation' => 'en_attente_validation',
-                    'Validé' => 'valide',
-                    'Rejeté' => 'rejete',
-                ],
-                'expanded' => true, // Pour afficher les choix sous forme de boutons radio
-                'multiple' => false, // Un seul choix possible
-                'attr' => [
-                    'class' => 'form-check-input',
-                ],
-            ])
+         
+           
             ->add('auteur', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',
