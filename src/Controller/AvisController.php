@@ -10,12 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\AvisTypeForm;
+use App\Service\EmailService;
 
 #[Route('/avis')]
 final class AvisController extends AbstractController
 {
    #[Route('/participation/{id}/nouveau', name: 'app_avis_new', methods: ['GET', 'POST'])]
-    public function avis_new(Request $request, EntityManagerInterface $em, Participation $participation, AvisRepository $avisRepository): Response
+    public function avis_new(Request $request, EntityManagerInterface $em, Participation $participation, AvisRepository $avisRepository, EmailService $email_service): Response
     {
     
     // Je commence par vérifier que l'utilisateur est bien connecté // 
@@ -73,10 +74,11 @@ final class AvisController extends AbstractController
     $form = $this->createForm(AvisTypeForm::class, $avis);
     $form->handleRequest($request);
     if($form->isSubmitted() && $form->isValid()){
-    
+        
+
         
     
-    
+  
     
     }
     
