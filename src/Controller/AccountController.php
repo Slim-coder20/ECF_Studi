@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Vehicule;
+use App\Form\RechargerCreditTypeForm;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -237,8 +238,35 @@ use App\Repository\TrajetRepository;
             'user' => $user,
         ]);
     }
+    // Cette route va nous permettre de recharger le crédit de nos utilisateurs // 
+
+     #[Route('/compte/credit/recharger', name: 'app_account_credit_recharger')]
+    #[IsGranted('ROLE_USER')]
+    public function rechargerCredit(Request $request, EntityManagerInterface $em): Response
+    {
+      /** @var \App\Entity\User $user */
+      $user = $this->getUser(); 
+
+      // création de formulaire pour recherger les crédits // 
+      $form = $this->createForm(RechargerCreditTypeForm::class); 
+
+      $form->handleRequest($request); 
+      if($form->isSubmitted() && $form->isValid()){
+        $montant = $form->get('montant')->getData();
+        $user->setCredits($user->getCredits() + $montant); 
+        $em->flush();
+        
+        $this->addFlash('success', 'Crédits recharger avec succès .'); 
+        return $this->redirectToRoute('app_account');
     
-    
+    }
+        
+    return $this->render('account/recharger_credit.html.twig', [
+        'form' => $form->createView(),
+        'credit' => $user->getCredits(),
+      
+        ]);
+    }
     
     
     

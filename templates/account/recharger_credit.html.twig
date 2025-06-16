@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ecoride | Recharger mes crédits
+{% endblock %}
+
+{% block body %}
+	<div class="container my-5">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<div class="card text-white">
+					<div class="card-header text-center">
+						<h1 class="text-center text-success">🌱 Recharger votre crédit🌱</h1>
+					</div>
+					<div class="card-body">
+						<p class="text-success">
+							Crédits actuels :
+							<strong>{{ credit }}</strong>
+						</p>
+						{{ form_start(form) }}
+						{{ form_row(form.montant) }}
+						<button type="submit" class="btn btn-outline-success my-2">Recharger</button>
+						{{ form_end(form) }}
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
