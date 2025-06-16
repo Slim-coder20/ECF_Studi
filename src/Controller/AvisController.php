@@ -48,7 +48,7 @@ final class AvisController extends AbstractController
     
     }
 
-    $existingAvis = $avisRepository->findByOne([
+    $existingAvis = $avisRepository->findOneBy([
        
         'auteur' => $currentUser,
         'trajet' => $trajetConcerne
@@ -75,23 +75,17 @@ final class AvisController extends AbstractController
     $form->handleRequest($request);
     if($form->isSubmitted() && $form->isValid()){
         
-
+        $em->persist($avis);
+        $em->flush();
         
-    
+        $this->addFlash('success', 'Votre avis a été soumis et en attente de validation.');
+
+        return $this->redirectToRoute('app_account_historique_passager');
   
     
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        return $this->render('avis/avis.html.twig', [
+  
+    return $this->render('avis/avis.html.twig', [
             'participation' => $participation,
             'trajet' => $trajetConcerne,
             'formAvis' => $form->createView(),

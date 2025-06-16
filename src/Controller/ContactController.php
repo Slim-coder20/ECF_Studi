@@ -27,7 +27,7 @@ final class ContactController extends AbstractController
         $form->handleRequest($request);
         // Vérification de la soumission du formulaire et de sa validité
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupération des données du formulaire
+            // Récupération des données du formulaire de contact // 
             $data = $form->getData();
             // Envoi du mail
            

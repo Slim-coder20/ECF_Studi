@@ -176,7 +176,7 @@ use App\Repository\TrajetRepository;
     public function deleteVehicule(Vehicule $vehicule, EntityManagerInterface $entityManagerInterface, Request $request): Response
     {
         // Vérifie que l'utilisateur est bien le propriétaire du véhicule
-      
+        
         if (!$vehicule->getProprietaire() || $vehicule->getProprietaire()->getId() !== $this->getUser()->getId()) {
         throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer ce véhicule.');
        }

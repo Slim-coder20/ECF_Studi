@@ -1,0 +1,44 @@
+<div class="container">
+	<h2>Votre trajet Ecoride est terminé !
+	</h2>
+	<p>Bonjour
+		{{passager.Nom}},
+	</p>
+	<p>
+		Nous vous informons que votre trajet avec
+		<strong>{{trajet.chauffeur.firstName | default(trajet.chauffeur.pseudo)}}</strong>
+		de
+		<strong>{{trajet.villeDepart}}</strong>
+		à
+		<strong>{{trajet.villeArrivee}}</strong>
+		est maintenant marqué comme terminé.
+	</p>
+
+	<p>
+		Pour finaliser cette expérience et aider notre communauté, merci de prendre un moment pour :
+
+	</p>
+	<ol>
+		<li>Valider que le trajet s'est bien déroulé.</li>
+		<li>Laisser un avis et une note sur votre expérience
+		</li>
+
+	</ol>
+
+	<p>
+		Cliquer sur le lien ci-dessous pour accéder à la page de validation et d'avis :
+
+	</p>
+	<p style="text-align: center;">
+		<a href="{{lien_validation}}" class="btn btn-success">Valider mon trajet et laisser un avis</a>
+
+	</p>
+	<p>
+    
+        si le bouton ne fonctionne pas , copiez et coller le lien suivant dans votre navigateur:<br>
+        <a href="{{lien_validation}}">{{lien_validation}}</a>
+    
+    </p>
+
+
+</div>

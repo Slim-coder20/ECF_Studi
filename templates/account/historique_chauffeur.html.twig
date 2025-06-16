@@ -43,7 +43,7 @@
 								{% elseif trajet.statut == 'complet' %}
 									<span class="badge bg-primary">Complet</span>
 								{% elseif trajet.statut == 'en_cours'%}
-									<span class="badge bg-secondary"></span>
+									<span class="badge bg-primary">En coours</span>
 								{% elseif  trajet.statut == 'annulé_par_chauffeur'%}
 									<span class="badge bg-danger">Annulé par vous</span>
 								{% elseif trajet.statut == 'terminé' %}
@@ -69,10 +69,10 @@
 										</form>
 
 									</div>
-									{% elseif trajet.statut == 'en_cours '%} 
+									{% elseif trajet.statut == 'en_cours'%} 
 									{# Formulaire arrivé a destination  #}
 										<form method="post" action="{{ path('app_trajet_terminer_chauffeur', {'id': trajet.id}) }}"> <input type="hidden" name="_token" value="{{ csrf_token('terminer_trajet_chauffeur' ~ trajet.id) }}">
-											<button type="submit" class="btn btn-sm-success">Arrivé(e) à destination</button>
+											<button type="submit" class="btn btn-success">Arrivé(e) à destination</button>
 										</form>
 									{% elseif  trajet.statut == 'annulé_par_chauffeur'%}
 									<span class="text-muted">Déjà annulé</span>
