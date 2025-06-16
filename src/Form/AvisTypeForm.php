@@ -27,6 +27,7 @@ class AvisTypeForm extends AbstractType
                     'class' => 'text-success',
                 ],
                 'choices' => [
+                    '⭐' => 1,
                     '⭐⭐' => 2,
                     '⭐⭐⭐' => 3,
                     '⭐⭐⭐⭐' => 4,
@@ -49,18 +50,8 @@ class AvisTypeForm extends AbstractType
             ])
          
            
-            ->add('auteur', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('chauffeur', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('trajet', EntityType::class, [
-                'class' => Trajet::class,
-                'choice_label' => 'id',
-            ])
+            
+           
         ;
     }
 
