@@ -45,7 +45,7 @@
                             {% elseif participation.statut == 'trajet_annule' %}
                                 <span class="badge bg-danger">Trajet Annulé</span>
                             {% else %}
-                                <span class="badge bg-secondary">{{ participation.statut|default('N/D')|capitalize }}</span>
+                                <span class="badge bg-primary">{{ participation.statut|default('N/D')|capitalize }}</span>
                             {% endif %}
                         </td>
                         <td>
@@ -57,7 +57,7 @@
                             {% elseif trajet.statut == 'annulee_par_passager' %}
                                 <span class="badge bg-danger">Annulé par chauffeur</span>
                             {% elseif trajet.statut == 'terminé' %}
-                                <span class="badge bg-secondary">Terminé</span>
+                                <span class="badge bg-success">Terminé</span>
                             {% else %}
                                 <span class="badge bg-light text-dark">{{ trajet.statut|default('N/D')|capitalize }}</span>
                             {% endif %}
@@ -69,7 +69,7 @@
                                 <button type="submit" class="btn btn-sm btn-warning">Annuler ma participation</button>
                             </form>
                             {% elseif participation.statut == 'annulee_par_chauffeur' or trajet.statut == 'terminé' %}
-                            <span class="text-muted">Trajet {{trajet.statut|replace({'annulé_par_chauffeur': 'annulé', 'terminé': 'terminé'}) }}</span>
+                            <span class="text-success">Trajet {{trajet.statut|replace({'annulé_par_chauffeur': 'annulé', 'terminé': 'terminé'}) }}</span>
                             {% else %}
                              <span class="text-muted">--</span>
                             {% endif %}
