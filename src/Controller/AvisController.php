@@ -57,7 +57,7 @@ final class AvisController extends AbstractController
 
     if($existingAvis){
         $this->addFlash('info', 'Vous avez déjà sounmis un avis pour ce trajet');
-        return $this->redirectToRoute('app_account_historique_passager');
+        return $this->redirectToRoute('app_account_historique');
     
     }
     // On instancie l'objet avis // 

@@ -46,8 +46,9 @@ class TrajetRepository extends ServiceEntityRepository
         }
 
        if ($search->date) {
-        $startDate = (clone $search->date)->setTime(0, 0, 0);
-        $endDate = (clone $search->date)->setTime(23, 59, 59);
+        $date = $search->date instanceof \DateTimeInterface ? clone $search->date : new \DateTime($search->date);
+        $startDate = (clone $date)->setTime(0, 0, 0);
+        $endDate = (clone $date)->setTime(23, 59, 59);
 
         $qb->andWhere('t.dateDepart BETWEEN :start AND :end')
         ->setParameter('start', $startDate)
@@ -62,7 +63,7 @@ class TrajetRepository extends ServiceEntityRepository
 
         if ($search->dureeMax) {
             $qb->andWhere('t.dateDepart >= :now')
-            ->andWhere('t.dateDeprt <= :dureeMax')
+            ->andWhere('t.dateDepart <= :dureeMax')
             ->setParameter('now', new \DateTime())
             ->setParameter('nextWeek', (new \DateTime())->modify('+7 days'));
         }
