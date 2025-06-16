@@ -149,13 +149,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
                     
                     $lienValidation = $this->generateUrl(
                       'app_avis_new',
-                      ['id_participation' => $participation->getId()],
+                      ['id' => $participation->getId()],
                       UrlGeneratorInterface::ABSOLUTE_URL  
                     );
                     $subject = 'Votre Trajet Ecoride est terminé: Validez votre expérience !';
                     $template = 'emails/validation_trajet_passager.html.twig';
                     $context = [
-                        'passagerNom' => 
+                        'passagerNom' => $passager->getFirstName() ?? $passager->getLastName() ?? $passager->getPseudo(),
                         $passager->getPseudo(),
                         $passager->getfirstName() ?? $passager->getlastName(),     
                         'trajet' => $trajet, 
