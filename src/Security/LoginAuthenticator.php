@@ -15,6 +15,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class LoginAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -22,7 +23,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, private AuthorizationCheckerInterface $authorizationChecker )
     {
     }
 
@@ -46,6 +47,13 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
     {   // on récupère la session de la requête de l'utilisateur avant la connxion // 
         $session = $request->getSession();
 
+        // 1. Vérifie si l'utilisateur est employé et le redirige vers la page employe 
+
+       if($this->authorizationChecker->isGranted('ROLE_EMPLOYE')){
+        return new RedirectResponse($this->urlGenerator->generate('app_admin_employe_avis_list'));  
+    
+        }
+        
         // redirection persoanalisée après la connexion vers le trajet voulu // 
         if ($session->has('intended_trajet')) {
         $trajetId = $session->get('intended_trajet');

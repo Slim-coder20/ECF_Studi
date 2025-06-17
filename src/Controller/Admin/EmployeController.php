@@ -31,7 +31,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
         
         return $this->render('admin/employe/avis_list.html.twig', [
             'avisList' => $avisEnAttente,
-            'page_title' => 'Avis en attente de validation', 
+            
         ]);
     }
 
