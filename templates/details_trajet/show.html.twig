@@ -87,7 +87,36 @@
 </div>
 <div>
     <a href="{{ path('app_search') }}" class="btn btn-outline-success w-100 my-3">Rechercher un Trajet</a>
-    <a href="{{ path('app_participer_trajet', { id: trajet.id }) }}" class="btn btn-outline-success w-100">Participer à un trajet</a>
+    {# <a href="{{ path('app_participer_trajet', { id: trajet.id }) }}" class="btn btn-outline-success w-100">Participer à un trajet</a> #} {# Ligne originale commentée/remplacée #}
+
+    {# === NOUVELLE LOGIQUE POUR LE BOUTON PARTICIPER === #}
+    {% if app.user %}
+        {# Utilisateur connecté #}
+        {% set participeDeja = false %}
+        {% for participation_item in trajet.participations %} {# Renommé pour éviter conflit avec 'avis' plus haut si jamais #}
+            {% if participation_item.passager == app.user %}
+                {% set participeDeja = true %}
+            {% endif %}
+        {% endfor %}
+
+        {% if trajet.chauffeur != app.user and not participeDeja and trajet.nbPlaces > 0 %}
+            <a href="{{ path('app_participer_trajet', {'id': trajet.id}) }}" class="btn btn-success w-100">Participer à ce trajet</a>
+        {% elseif trajet.chauffeur == app.user %}
+            <p class="alert alert-info text-center">Vous êtes le chauffeur de ce trajet.</p>
+        {% elseif participeDeja %}
+            <p class="alert alert-info text-center">Vous participez déjà à ce trajet.</p>
+        {% elseif trajet.nbPlaces <= 0 %}
+            <p class="alert alert-warning text-center">Ce trajet est complet.</p>
+        {% endif %}
+    {% else %}
+        {# Visiteur (non connecté) #}
+        {% if trajet.nbPlaces > 0 %}
+            <a href="{{ path('app_trajet_initier_participation', {'id': trajet.id}) }}" class="btn btn-primary w-100">Participer (Connexion requise)</a>
+        {% else %}
+            <p class="alert alert-warning text-center">Ce trajet est complet.</p>
+        {% endif %}
+    {% endif %}
+    {# === FIN DE LA NOUVELLE LOGIQUE === #}
   
 </div>
     

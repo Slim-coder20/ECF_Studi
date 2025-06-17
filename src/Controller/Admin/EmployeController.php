@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Repository\AvisRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Avis;
+use App\Repository\ParticipationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -100,8 +101,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
     public function historiqueAvisTraites(AvisRepository $avisRepository): Response
     {
         // récupère les avis traité avec statut approuve et rejeté // 
-        $avisTraites = ['approuve', 'rejete'];
-        $$avisTraites = $avisRepository->findBy(
+        $statutsTraites = ['approuve', 'rejete'];
+        $avisTraites = $avisRepository->findBy(
             ['statut' => $statutsTraites ],
             ['date' => 'DESC' ],
 
@@ -113,24 +114,24 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
         ]);
     
     }
+    // Cette méthode et route va nous permettre de gérer la partie Trajet problématiqques // <
 
     #[Route('/trajets/problematiques', name: 'app_admin_employe_trajets_problematiques')]
-    public function listTrajetsProblematiques(AvisRepository $avisRepository): Response
+    public function listTrajetsProblematiques(ParticipationRepository $participationRepository): Response
     {
-        // récupère les avis traité avec statut approuve et rejeté // 
-        $avisTraites = ['approuve', 'rejete'];
-        $$avisTraites = $avisRepository->findBy(
-            ['statut' => $statutsTraites ],
-            ['date' => 'DESC' ],
-
+        $statutProbleme = 'trajet_mal_passe';
+        $participationsProblematiques = $participationRepository->findBy(
+            ['statut' => $statutProbleme],
+            ['id' => 'DESC']
+            
         );
-    
-        return $this->render('admin/employe/avis_historique_list.html.twig', [
-            'avisList' => $avisTraites,
+
+        return $this->render('admin/employe/trajets_problematiques_list.html.twig', [
+            'participationsList' => $participationsProblematiques,
             
         ]);
-    
     }
+    
 
 
 

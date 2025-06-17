@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %} 
+
+{% block title %}Ecoride | Historique avis liste {% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-success text-center">🌱 Historique des avis 🌱</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    {% if avisList is not empty %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th class="text-success">Date Soumission</th>
+                        <th class="text-success">Auteur</th>
+                        <th class="text-success">Chauffeur Concerné</th>
+                        <th class="text-success">Trajet</th>
+                        <th class="text-success">Note</th>
+                        <th class="text-success">Commentaire</th>
+                        <th class="text-success">Statut Final</th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for avis in avisList %}
+                        <tr>
+                            <td>{{ avis.date|date('d/m/Y H:i') }}</td>
+                            <td>{{ avis.auteur.pseudo }}</td>
+                            <td>{{ avis.chauffeur.pseudo }}</td>
+                            <td>
+                                <small>
+                                    {{ avis.trajet.villeDepart }} <i class="fas fa-arrow-right"></i> {{ avis.trajet.villeArrivee }}<br>
+                                    Le {{ avis.trajet.dateDepart|date('d/m/Y ') }}
+                                </small>
+                            </td>
+                            <td>
+                                {% for i in 1..5 %}
+                                    {% if i <= avis.note %}<i class="fas fa-star text-warning"></i>{% else %}<i class="far fa-star text-warning"></i>{% endif %}
+                                {% endfor %}
+                                ({{ avis.note }}/5)
+                            </td>
+                            <td>{{ avis.commentaire|nl2br|default('Aucun commentaire') }}</td>
+                            <td>
+                                {% if avis.statut == 'approuve' %}
+                                    <span class="badge bg-success">Approuvé</span>
+                                {% elseif avis.statut == 'rejete' %}
+                                    <span class="badge bg-danger">Rejeté</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ avis.statut|replace({'_': ' '})|capitalize }}</span>
+                                {% endif %}
+                            </td>
+                            {# <td>{{ avis.dateTraitement|date('d/m/Y H:i')|default('-') }}</td> Adaptez si vous avez un champ dateTraitement #}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            Aucun avis traité dans l'historique pour le moment.
+        </div>
+    {% endif %}
+
+    <div class="mt-4 text-center">
+        <a href="{{ path('app_admin_employe_dashboard') }}" class="btn btn-success">
+            <i class="fas fa-arrow-left"></i> Retour au tableau de bord employé
+        </a>
+    </div>
+</div>
+{% endblock %}

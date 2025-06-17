@@ -33,7 +33,7 @@ final class AvisController extends AbstractController
     //2. On vérifie le statut de la participation : le statut doit être en statut terminé pour pouvoir envoyer un avis // 
      if ($participation->getStatut() !== 'en_attente_validation_trajet') {
             $this->addFlash('warning', 'Vous ne pouvez pas laisser d\'avis pour ce trajet actuellement (statut incorrect).');
-            return $this->redirectToRoute('app_account_historique_passager'); 
+            return $this->redirectToRoute('app_account_historique'); 
         
         }
     
@@ -95,7 +95,7 @@ final class AvisController extends AbstractController
         
         $this->addFlash('success', 'Votre avis a été soumis et en attente de validation.');
 
-        return $this->redirectToRoute('app_account_historique_passager');
+        return $this->redirectToRoute('app_account_historique');
   
     
     }

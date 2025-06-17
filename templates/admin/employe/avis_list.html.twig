@@ -1,58 +1,71 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ecoride | Avis employe{% endblock %}
+{% block title %}Ecoride | Avis employe
+{% endblock %}
 
 
 {% block body %}
-<div class="container mt-4 ">
-    <h1 class="text-success text-center">Avis en atttente de validation </h1><br>
+	<div class="container mt-4 ">
+		<h1 class="text-success text-center">Avis en atttente de validation
+		</h1><br>
 
-    {% if avisList is not empty %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th class="text-success">Date</th>
-                    <th class="text-success">Auteur</th>
-                    <th class="text-success">Chauffeur</th>
-                    <th class="text-success">Trajet</th>
-                    <th class="text-success">Note</th>
-                    <th class="text-success">Commentaire</th>
-                    <th class="text-success">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for avis in avisList %}
-                    <tr>
-                        <td>{{ avis.date|date('d/m/Y H:i') }}</td>
-                        <td>{{ avis.auteur.pseudo }} ({{ avis.auteur.email }})</td>
-                        <td>{{ avis.chauffeur.pseudo }} ({{ avis.chauffeur.email }})</td>
-                        <td>
-                            {{ avis.trajet.villeDepart }} - {{ avis.trajet.villeArrivee }}<br>
-                            <small>ID: {{ avis.trajet.id }}</small>
-                        </td>
-                        <td>{{ avis.note }}/5</td>
-                        <td>{{ avis.commentaire|nl2br }}</td>
-                        <td>
-                            <form method="post" action="{{ path('app_admin_employe_avis_valider', {'id': avis.id}) }}" style="display: inline-block;">
-                                <input type="hidden" name="_token" value="{{ csrf_token('valider' ~ avis.id) }}">
-                                <button type="submit" class="btn btn-sm btn-success">Valider</button>
-                            </form>
-                            <form method="post" action="{{ path('app_admin_employe_avis_refuser', {'id': avis.id}) }}" style="display: inline-block; margin-top: 5px;">
-                                <input type="hidden" name="_token" value="{{ csrf_token('refuser' ~ avis.id) }}">
-                                <button type="submit" class="btn btn-sm btn-danger">Refuser</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="7" class="text-center">Aucun avis en attente pour le moment.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p class="text-center">Aucun avis en attente pour le moment.</p>
-    {% endif %}
-</div>
+		{% if avisList is not empty %}
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th class="text-success">Date</th>
+						<th class="text-success">Auteur</th>
+						<th class="text-success">Chauffeur</th>
+						<th class="text-success">Trajet</th>
+						<th class="text-success">Note</th>
+						<th class="text-success">Commentaire</th>
+						<th class="text-success">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for avis in avisList %}
+						<tr>
+							<td>{{ avis.date|date('d/m/Y H:i') }}</td>
+							<td>{{ avis.auteur.pseudo }}
+								({{ avis.auteur.email }})</td>
+							<td>{{ avis.chauffeur.pseudo }}
+								({{ avis.chauffeur.email }})</td>
+							<td>
+								{{ avis.trajet.villeDepart }}
+								-
+								{{ avis.trajet.villeArrivee }}<br>
+								<small>ID:
+									{{ avis.trajet.id }}</small>
+							</td>
+							<td>{{ avis.note }}/5</td>
+							<td>{{ avis.commentaire|nl2br }}</td>
+							<td>
+								<form method="post" action="{{ path('app_admin_employe_avis_valider', {'id': avis.id}) }}" style="display: inline-block;">
+									<input type="hidden" name="_token" value="{{ csrf_token('valider' ~ avis.id) }}">
+									<button type="submit" class="btn btn-sm btn-success">Valider</button>
+								</form>
+								<form method="post" action="{{ path('app_admin_employe_avis_refuser', {'id': avis.id}) }}" style="display: inline-block; margin-top: 5px;">
+									<input type="hidden" name="_token" value="{{ csrf_token('refuser' ~ avis.id) }}">
+									<button type="submit" class="btn btn-sm btn-danger">Refuser</button>
+								</form>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="7" class="text-center">Aucun avis en attente pour le moment.</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% else %}
+			<p class="text-center">Aucun avis en attente pour le moment.</p>
+		{% endif %}
+		<div class="mt-4 text-center">
+			<a href="{{ path('app_admin_employe_dashboard') }}" class="btn btn-success">
+				<i class="fas fa-arrow-left"></i>
+				Retour au tableau de bord employé
+			</a>
+		</div>
+	</div>
 
 {% endblock %}

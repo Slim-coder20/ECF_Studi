@@ -22,18 +22,29 @@ final class DetailsTrajetController extends AbstractController
         ]);
     }
 
-    // Cette route va nous permettre de participer à un trajet via la page détails du trajet//  
+
+    // Cette route et méthode va nous permettre d'initier une participation à un trajet avant connexion de stocker ça dans une sessiosn et l'afficher après connexion pour la confirmer // 
+     #[Route('/trajet/{id}/initier-participation', name: 'app_trajet_initier_participation', methods: ['GET'])]
+    public function initierParticipation(Request $request, Trajet $trajet): Response 
+    {
+        if(!$this->getUser()){ // si l'utilisateur n'est pas connecté // 
+            $session = $request->getSession();
+            $session->set('intended_trajet', $trajet->getId());
+            $this->addFlash('info', 'Veuillez vous connecter ou créer un compte pour participer à ce trajet.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Si l'utilisateur est déjà connecté, on le redirige directement vers la page de confirmation/participation
+        return $this->redirectToRoute('app_participer_trajet', ['id' => $trajet->getId()]);
+    }
+
+    // Cette route va nous permettre de participer à un trajet via la page détails du trajet et de récupérer l'intention de participation à un trajet avant connexion //  
     #[Route('/trajet/{id}/participer', name: 'app_participer_trajet')]
     public function participer(Trajet $trajet, Request $request, EntityManagerInterface $em): Response
     {   
          /** @var \App\Entity\User|null $user */ 
          $user = $this->getUser(); 
-        // On stocke l'intention de participer avant connexion // 
-        if(!$this->getUser()) {
-            $session = $request->getSession();
-            $session->set('intended_trajet', $trajet->getId());
-            return $this->redirectToRoute('app_login');
-        }
+      
         
         // On vérifie si l'utilisateur est le chauffeur du trajet //
         if($trajet->getChauffeur() == $user){

@@ -1,0 +1,85 @@
+
+{% extends 'base.html.twig' %} 
+
+{% block title %}Ecoride | Trajets problématiques {% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-danger text-center"> 🌱 Trajet signalé avec problèmes 🌱  </h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    {# La variable passée par le contrôleur est 'participationsList' #}
+    {% if participationsList is not empty %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th class="text-success">Date du Trajet</th>
+                        <th class="text-success">Trajet (Départ - Arrivée)</th>
+                        <th class="text-success">Passager Ayant Signalé</th>
+                        <th class="text-success">Chauffeur</th>
+                        <th class="text-success">Statut Participation</th>
+                        <th class="text-success">Date Signalement</th> {# Si vous stockez la date de modification du statut #}
+                        <th class="text-success">Actions</th> {# Optionnel: pour marquer comme "vu", "résolu", etc. #}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for participation in participationsList %}
+                        <tr>
+                            <td>{{ participation.trajet.dateDepart|date('d/m/Y ') }}</td>
+                            <td>
+                                {{ participation.trajet.villeDepart }} <i class="fas fa-arrow-right"></i> {{ participation.trajet.villeArrivee }}
+                            </td>
+                            <td>
+                                {{ participation.passager.pseudo }}<br>
+                                <small>{{ participation.passager.email }}</small>
+                            </td>
+                            <td>
+                                {{ participation.trajet.chauffeur.pseudo }}<br>
+                                <small>{{ participation.trajet.chauffeur.email }}</small>
+                            </td>
+                            <td>
+                                <span class="badge bg-danger text-white">{{ participation.statut|replace({'_': ' '})|capitalize }}</span>
+                            </td>
+                            <td>
+                                {# Si la date de participation est la date du signalement, ou si vous avez un champ dédié #}
+                                {{ participation.dateParticipation|date('d/m/Y H:i') }}
+                            </td>
+                            <td>
+                                <a href="{{ path('app_details_trajet', {'id': participation.trajet.id}) }}" class="btn btn-sm btn-outline-info" title="Voir détails du trajet">
+                                    <i class="fas fa-search"></i> Trajet
+                                </a>
+                                {# Vous pourriez ajouter des actions ici, comme "Marquer comme résolu" #}
+                                {# Exemple :
+                                <form action="{{ path('app_admin_employe_probleme_resoudre', {'id': participation.id}) }}" method="post" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('resoudre' ~ participation.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-success" title="Marquer comme résolu">
+                                        <i class="fas fa-check-circle"></i> Résolu
+                                    </button>
+                                </form>
+                                #}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            Aucun trajet signalé avec un problème pour le moment.
+        </div>
+    {% endif %}
+
+    <div class="mt-4 text-center">
+        <a href="{{ path('app_admin_employe_dashboard') }}" class="btn btn-success">
+            <i class="fas fa-arrow-left"></i> Retour au tableau de bord employé
+        </a>
+    </div>
+</div>
+{% endblock %}
