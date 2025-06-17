@@ -26,7 +26,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
     {
         // On récupère la liste des avis en attente de validation  via le TrajetRepository avec le findBy 
 
-        $avisEnAttente = $avisRepository->findBy(['statut' => 'en_attente_validation'], ['date' => 'DESC']);
+        $avisEnAttente = $avisRepository->findBy(['statut' => 'en_attente_de _validation'], ['date' => 'DESC']);
         
         
         return $this->render('admin/employe/avis_list.html.twig', [
