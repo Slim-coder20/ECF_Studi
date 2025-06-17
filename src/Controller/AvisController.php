@@ -74,6 +74,21 @@ final class AvisController extends AbstractController
     $form = $this->createForm(AvisTypeForm::class, $avis);
     $form->handleRequest($request);
     if($form->isSubmitted() && $form->isValid()){
+        // je recupère la valeur du champ 'trajet_mal_passe' dans mon entité participation // 
+
+        $trajetMalPasse = $form->get('trajet_mal_passe')->getData();
+        if($trajetMalPasse === true){
+            $participation->setStatut('trajet_mal_passe');
+            $em->persist($participation);
+            $this->addFlash('success', 'Votre avis a été sounis et en attente de validation. ');
+        
+        }else{
+        
+            $participation->setStatut('trajet_valide_par_passager');
+            $this->addFlash('success', 'Votre avis a été soumis et est en attente de validation.');   
+        
+        
+        }
         
         $em->persist($avis);
         $em->flush();

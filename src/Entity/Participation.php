@@ -28,7 +28,7 @@ class Participation
     private ?int $prixPaye = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    private ?string $statut = null;
+    private ?string $statut = 'trajet_mal_passe';
 
     public function getId(): ?int
     {

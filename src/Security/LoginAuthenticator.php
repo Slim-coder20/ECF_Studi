@@ -50,7 +50,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         // 1. Vérifie si l'utilisateur est employé et le redirige vers la page employe 
 
        if($this->authorizationChecker->isGranted('ROLE_EMPLOYE')){
-        return new RedirectResponse($this->urlGenerator->generate('app_admin_employe_avis_list'));  
+        return new RedirectResponse($this->urlGenerator->generate('app_admin_employe_dashboard'));  
     
         }
         
@@ -69,7 +69,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
         // For example:
         return new RedirectResponse($this->urlGenerator->generate('app_account'));
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+      
     }
 
     protected function getLoginUrl(Request $request): string

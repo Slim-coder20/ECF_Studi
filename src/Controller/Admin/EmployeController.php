@@ -16,7 +16,20 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_EMPLOYE')]
  class EmployeController extends AbstractController
 {
- /**
+  #[Route('/', name: 'app_admin_employe_dashboard')]
+    
+  // cette méthode va nous permettre d'arriver sur l'espace Employe //
+  public function dashboard(): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        
+        return $this->render('admin/employe/employe.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
+/**
   * Cette route va nous permettre les avis avec le statut en attente de validation 
   */
 
@@ -81,6 +94,43 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
     return $this->redirectToRoute('app_admin_employe_avis_list');
  }
 
+// je créé une méthode pour l'historique des avis et une nouvelle route pour ça // 
+
+    #[Route('/avis/historique', name: 'app_admin_employe_avis_historique')]
+    public function historiqueAvisTraites(AvisRepository $avisRepository): Response
+    {
+        // récupère les avis traité avec statut approuve et rejeté // 
+        $avisTraites = ['approuve', 'rejete'];
+        $$avisTraites = $avisRepository->findBy(
+            ['statut' => $statutsTraites ],
+            ['date' => 'DESC' ],
+
+        );
+    
+        return $this->render('admin/employe/avis_historique_list.html.twig', [
+            'avisList' => $avisTraites,
+            
+        ]);
+    
+    }
+
+    #[Route('/trajets/problematiques', name: 'app_admin_employe_trajets_problematiques')]
+    public function listTrajetsProblematiques(AvisRepository $avisRepository): Response
+    {
+        // récupère les avis traité avec statut approuve et rejeté // 
+        $avisTraites = ['approuve', 'rejete'];
+        $$avisTraites = $avisRepository->findBy(
+            ['statut' => $statutsTraites ],
+            ['date' => 'DESC' ],
+
+        );
+    
+        return $this->render('admin/employe/avis_historique_list.html.twig', [
+            'avisList' => $avisTraites,
+            
+        ]);
+    
+    }
 
 
 

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ecoride | Espace Employé
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-4 ">
+        <h2 class="text-success text-center">🌱 Espace Employé 🌱</h2><br>
+
+        <div class="row mt-4 ">
+            <div class="col-md-4 mb-3 ">
+                <div class="card p-3 shadow-sm text-center border border-success rounded">
+                   
+                    {% if user.photo %}
+                        <img src="{{ asset('uploads/photos/' ~ user.photo) }}" class="rounded-circle mb-2 mx-auto" width="100" height="100" alt="Photo de {{ user.pseudo }}">
+                    {% else %}
+                        <img src="{{ asset('uploads/photos/default_avatar.png') }}" class="rounded-circle mb-2 mx-auto" width="100" height="100" alt="Avatar par défaut">
+                    {% endif %}
+                    <h4 class="text-success ">
+                        {{ user.pseudo }}</h4>
+                    <span class="badge bg-success">Employé Actif</span><br>
+                    {# Le lien 'Modifier mon profil' peut rester s'il est pertinent pour l'employé #}
+                    <a href="{{path('app_account_edit')}}" class="btn btn-outline-success mt-3">Modifier mon profil</a>
+                    <a href="{{path('app_admin_employe_avis_list')}}" class="btn btn-outline-success mt-3">Avis en attente</a>
+                    <a href="{{path('app_admin_employe_trajets_problematiques')}}" class="btn btn-outline-success mt-3">Trajets problématiques</a>
+                    <a href="{{path('app_admin_employe_avis_historique')}}" class="btn btn-outline-success mt-3">Historique des avis</a>
+                </div>
+            </div>
+
+            <div class="col-md-8 mb-3">
+                <div class="card p-4 shadow-sm  border border-success rounded">
+                    <h5 class="text-success">🌱 Informations personnelles</h5>
+                    <p>
+                        <strong class="text-success">🌱 Email :</strong>
+                        {{ user.email }}</p>
+                    <p>
+                        <strong class="text-success">🌱 Téléphone :</strong>
+                        {{ user.telephone | default('Non renseigné') }}</p> 
+
+                    <hr>
+                
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
