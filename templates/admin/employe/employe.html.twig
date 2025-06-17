@@ -19,8 +19,6 @@
                     <h4 class="text-success ">
                         {{ user.pseudo }}</h4>
                     <span class="badge bg-success">Employé Actif</span><br>
-                    {# Le lien 'Modifier mon profil' peut rester s'il est pertinent pour l'employé #}
-                    <a href="{{path('app_account_edit')}}" class="btn btn-outline-success mt-3">Modifier mon profil</a>
                     <a href="{{path('app_admin_employe_avis_list')}}" class="btn btn-outline-success mt-3">Avis en attente</a>
                     <a href="{{path('app_admin_employe_trajets_problematiques')}}" class="btn btn-outline-success mt-3">Trajets problématiques</a>
                     <a href="{{path('app_admin_employe_avis_historique')}}" class="btn btn-outline-success mt-3">Historique des avis</a>
